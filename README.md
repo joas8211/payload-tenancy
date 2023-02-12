@@ -9,7 +9,7 @@ instance of Payload CMS.
 
 - [x] **Tenant isolation**: Each tenant has it's own documents and only that
       tenant can access them.
-- [x] **Hierarchial tenant management**: Tenants have a parent. Parent tenants
+- [x] **Hierarchial tenant management**: Tenants have parents. Parent tenants
       can manage and access their children in a hierarchical manner.
 - [ ] **Domain or path mapping**: Each tenant is mapped to its own domain or
       path to create clear separation between tenants.
