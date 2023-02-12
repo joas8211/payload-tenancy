@@ -1,0 +1,12 @@
+{
+  "include": ["src/index.ts"],
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "paths": {
+      "payload/generated-types": ["./src/types.ts"]
+    }
+  }
+}
