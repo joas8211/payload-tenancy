@@ -21,6 +21,15 @@ export const tenancy =
   ({ tenantCollection = "tenants" }: TenancyOptions = {}): Plugin =>
   (config) => {
     const options: TenancyOptions = { tenantCollection };
+    const tenantCollectionExists = config.collections.some(
+      (collection) => collection.slug === tenantCollection
+    );
+    if (!tenantCollectionExists) {
+      throw new Error(
+        `Tenant collection with slug '${tenantCollection}' does not exist.` +
+          " Create it or pass correct options to use tenancy plugin."
+      );
+    }
 
     return {
       ...config,
