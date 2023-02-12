@@ -1,4 +1,5 @@
 import { Payload } from "payload";
+import { TenancyOptions } from "../options";
 
 /**
  * @param payload Payload instance
@@ -6,20 +7,31 @@ import { Payload } from "payload";
  * @returns All tenant IDs that the tenant has access to. Output will be the
  *          inputted tenant ID and all sub-tenant IDs.
  */
-export const getAuthorizedTenants = async (
-  payload: Payload,
-  tenantId: string
-): Promise<string[]> => {
+export const getAuthorizedTenants = async ({
+  options,
+  payload,
+  tenantId,
+}: {
+  options: TenancyOptions;
+  payload: Payload;
+  tenantId: string;
+}): Promise<string[]> => {
   return [
     tenantId,
     ...(
       await Promise.all(
         (
           await payload.find({
-            collection: "tenants",
+            collection: options.tenantCollection,
             where: { parent: { equals: tenantId } },
           })
-        ).docs.map((tenant) => getAuthorizedTenants(payload, tenant.id))
+        ).docs.map((tenant) =>
+          getAuthorizedTenants({
+            options,
+            payload,
+            tenantId: tenant.id,
+          })
+        )
       )
     ).flat(),
   ];

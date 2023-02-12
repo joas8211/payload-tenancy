@@ -1,12 +1,19 @@
+import { Config } from "payload/config";
 import { Field } from "payload/types";
+import { TenancyOptions } from "../options";
 
 /**
  * @returns Tenant field for generic resources.
  */
-export const createResourceTenantField = (): Field => ({
+export const createResourceTenantField = ({
+  options: { tenantCollection },
+}: {
+  options: TenancyOptions;
+  config: Config;
+}): Field => ({
   type: "relationship",
   name: "tenant",
-  relationTo: "tenants",
+  relationTo: tenantCollection,
   hidden: true,
   hooks: {
     beforeChange: [

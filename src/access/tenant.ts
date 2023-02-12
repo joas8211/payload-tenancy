@@ -1,4 +1,5 @@
-import { Access } from "payload/config";
+import { Access, Config } from "payload/config";
+import { TenancyOptions } from "../options";
 import { getAuthorizedTenants } from "../utils/getAuthorizedTenants";
 import { limitAccess } from "../utils/limitAccess";
 
@@ -9,7 +10,14 @@ import { limitAccess } from "../utils/limitAccess";
  * @returns Collection access control for tenants
  */
 export const createTenantReadAccess =
-  (original?: Access): Access =>
+  ({
+    options,
+    original,
+  }: {
+    options: TenancyOptions;
+    config: Config;
+    original?: Access;
+  }): Access =>
   async (args) =>
     // User must be logged in.
     Boolean(args.req.user) &&
@@ -19,10 +27,11 @@ export const createTenantReadAccess =
       // Limit access to users's tenant or its sub-tenants.
       limitAccess((await original?.(args)) ?? true, {
         id: {
-          in: await getAuthorizedTenants(
-            args.req.payload,
-            args.req.user.tenant.id
-          ),
+          in: await getAuthorizedTenants({
+            options,
+            payload: args.req.payload,
+            tenantId: args.req.user.tenant.id,
+          }),
         },
       }));
 
@@ -33,7 +42,13 @@ export const createTenantReadAccess =
  * @returns Collection access control for tenants
  */
 export const createTenantDeleteAccess =
-  (original?: Access): Access =>
+  ({
+    original,
+  }: {
+    options: TenancyOptions;
+    config: Config;
+    original?: Access;
+  }): Access =>
   async (args) =>
     // User must be logged in and have assigned tenant.
     Boolean(args.req.user?.tenant) &&

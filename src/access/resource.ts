@@ -1,4 +1,5 @@
-import { Access } from "payload/config";
+import { Access, Config } from "payload/config";
+import { TenancyOptions } from "../options";
 import { limitAccess } from "../utils/limitAccess";
 
 /**
@@ -8,7 +9,13 @@ import { limitAccess } from "../utils/limitAccess";
  * @returns Collection access control for generic resources
  */
 export const createResourceReadAccess =
-  (original?: Access): Access =>
+  ({
+    original,
+  }: {
+    options: TenancyOptions;
+    config: Config;
+    original?: Access;
+  }): Access =>
   async (args) =>
     // User must be logged in and have assigned tenant.
     Boolean(args.req.user?.tenant) &&
@@ -26,7 +33,13 @@ export const createResourceReadAccess =
  * @returns Collection access control for generic resources
  */
 export const createResourceCreateAccess =
-  (original?: Access): Access =>
+  ({
+    original,
+  }: {
+    options: TenancyOptions;
+    config: Config;
+    original?: Access;
+  }): Access =>
   (args) =>
     // User must be logged in and have assigned tenant.
     (Boolean(args.req.user?.tenant) && original?.(args)) ?? true;
