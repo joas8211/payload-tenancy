@@ -11,8 +11,12 @@ instance of Payload CMS.
       tenant can access them.
 - [x] **Hierarchial tenant management**: Tenants have parents. Parent tenants
       can manage and access their children in a hierarchical manner.
-- [ ] **Domain or path mapping**: Each tenant is mapped to its own domain or
-      path to create clear separation between tenants.
+- [x] **Path mapping**: Each tenant can be mapped to its own path to separate
+      login pages and to allow access sub-tenants.
+- [ ] **Domain mapping**: Each tenant can be mapped to its own domain to create
+      clear separation between tenants.
+- [ ] **Tested properly**: The project is tested thoroughly with unit tests,
+      e2e tests and manual testing.
 
 ## Installation
 
@@ -49,5 +53,10 @@ export default buildConfig({
 
 ## Setup
 
-After enabling tenancy plugin you must create the root tenant. After that you
-might need to reload the page to refresh accesses.
+Some notes about setup:
+
+- Setup can currently be only made in when using "user" isolation strategy,
+  which is the default strategy.
+- When creating initial user, there's tenant field, but it can be left empty.
+- After enabling tenancy plugin you must create the root tenant. After that you
+  might need to reload the page to refresh accesses.

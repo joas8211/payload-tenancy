@@ -1,4 +1,4 @@
-import { TenancyOptions } from "./options";
+import { TenancyOptions, validateOptions } from "./options";
 import { Plugin } from "payload/config";
 import {
   createResourceCreateAccess,
@@ -9,42 +9,31 @@ import {
   createTenantDeleteAccess,
 } from "./access/tenant";
 import { createUserCreateAccess, createUserReadAccess } from "./access/user";
+import { createAdminAccess } from "./access/auth";
 import { createResourceTenantField } from "./fields/resourceTenant";
 import { createTenantParentField } from "./fields/tenantParent";
 import { createUserTenantField } from "./fields/userTenant";
+import { createTenantSlugField } from "./fields/tenantSlug";
 import {
   createTenantAfterChangeHook,
   createTenantBeforeDeleteHook,
 } from "./hooks/tenant";
+import { createPathMapping } from "./middleware/pathMapping";
+import { createRestrictLogin } from "./hooks/auth";
 
 export const tenancy =
-  ({ tenantCollection = "tenants" }: TenancyOptions = {}): Plugin =>
+  (partialOptions: Partial<TenancyOptions> = {}): Plugin =>
   (config) => {
-    const options: TenancyOptions = { tenantCollection };
-
-    const tenantCollectionExists = config.collections.some(
-      (collection) => collection.slug === tenantCollection
-    );
-    if (!tenantCollectionExists) {
-      throw new Error(
-        `Tenant collection with slug '${tenantCollection}' does not exist.` +
-          " Create it or pass correct options to use tenancy plugin."
-      );
-    }
-
-    const authCollectionExists = config.collections.some(
-      (collection) => collection.auth
-    );
-    if (!authCollectionExists) {
-      throw new Error(
-        "No authentication collection exists. Create one to use tenancy plugin."
-      );
-    }
+    const options = validateOptions({ options: partialOptions, config });
+    const basePath =
+      options.isolationStrategy === "path" && "location" in globalThis
+        ? "/" + location.pathname.slice(1).split("/")[0]
+        : "";
 
     return {
       ...config,
       collections: config.collections.map((collection) =>
-        collection.slug === tenantCollection
+        collection.slug === options.tenantCollection
           ? // Modify tenant collection
             {
               ...collection,
@@ -68,6 +57,7 @@ export const tenancy =
               },
               fields: [
                 ...collection.fields,
+                createTenantSlugField({ options, config }),
                 createTenantParentField({
                   options,
                   config,
@@ -117,6 +107,11 @@ export const tenancy =
                   config,
                   original: collection.access?.delete,
                 }),
+                admin: createAdminAccess({
+                  options,
+                  config,
+                  original: collection.access?.admin,
+                }),
               },
               fields: [
                 ...collection.fields,
@@ -125,6 +120,16 @@ export const tenancy =
                   config,
                 }),
               ],
+              hooks: {
+                ...collection.hooks,
+                beforeLogin: [
+                  ...(collection.hooks?.beforeLogin || []),
+                  createRestrictLogin({
+                    options,
+                    config,
+                  }),
+                ],
+              },
             }
           : // Modify resource collections
             {
@@ -161,5 +166,31 @@ export const tenancy =
               ],
             }
       ),
+      routes: {
+        admin: basePath + (config.routes?.admin ?? "/admin"),
+        api: basePath + (config.routes?.api ?? "/api"),
+        graphQL: basePath + (config.routes?.graphQL ?? "/graphql"),
+        graphQLPlayground:
+          basePath + (config.routes?.graphQLPlayground ?? "/playground"),
+      },
+      onInit: async (payload) => {
+        await config.onInit?.(payload);
+
+        if (options.isolationStrategy === "path") {
+          payload.express.use(createPathMapping({ options, config, payload }));
+
+          // Move the added middleware up in the stack as far as possible (after
+          // "expressInit" middleware).
+          const router = payload.express._router;
+          const index = router.stack.findIndex(
+            (layer) => layer.name === "expressInit"
+          );
+          router.stack = [
+            ...router.stack.slice(0, index + 1),
+            ...router.stack.slice(-1),
+            ...router.stack.slice(index + 1, -1),
+          ];
+        }
+      },
     };
   };

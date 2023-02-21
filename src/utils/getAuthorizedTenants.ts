@@ -2,8 +2,6 @@ import { Payload } from "payload";
 import { TenancyOptions } from "../options";
 
 /**
- * @param payload Payload instance
- * @param tenantId The tenant who's authorization to list
  * @returns All tenant IDs that the tenant has access to. Output will be the
  *          inputted tenant ID and all sub-tenant IDs.
  */
@@ -14,8 +12,12 @@ export const getAuthorizedTenants = async ({
 }: {
   options: TenancyOptions;
   payload: Payload;
+  /**
+   * The tenant who's authorization to list
+   */
   tenantId: string;
 }): Promise<string[]> => {
+  if (!tenantId) return [];
   return [
     tenantId,
     ...(

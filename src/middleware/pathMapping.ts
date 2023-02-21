@@ -1,0 +1,60 @@
+import { Handler, Request } from "express";
+import { Payload } from "payload";
+import { Config } from "payload/config";
+import { TenancyOptions } from "../options";
+
+/**
+ * Map the requested path to correct tenant. Adds the tenant to the request
+ * object.
+ *
+ * @returns Express middleware
+ */
+export const createPathMapping =
+  ({
+    options,
+    config,
+    payload,
+  }: {
+    options: TenancyOptions;
+    config: Config;
+    payload: Payload;
+  }): Handler =>
+  async (req: Request & { tenant?: string }, res, next) => {
+    // Allow to access any admin resources like JavaScript bundles.
+    const adminRoute = config.routes?.admin || "/admin";
+    if (new RegExp(`^${adminRoute}.*\\.[^/]+$`).test(req.url)) {
+      next();
+      return;
+    }
+
+    // Deny access to the normal admin route.
+    if (req.url === adminRoute || req.url.startsWith(adminRoute + "/")) {
+      res.status(404).send();
+      return;
+    }
+
+    // There must be a path with at least one segment and that segment is tenant
+    // slug.
+    const tenantSlug = req.url.slice(1).split("/")[0];
+    if (!tenantSlug) {
+      res.status(404).send();
+      return;
+    }
+
+    // Check that tenant exists and attach it to the request.
+    req.tenant = (
+      await payload.find({
+        collection: options.tenantCollection,
+        where: { slug: { equals: tenantSlug } },
+      })
+    ).docs[0];
+    if (!req.tenant) {
+      res.status(404).send();
+      return;
+    }
+
+    // Remove tenant slug from the request URL so it can be processed normally
+    // by payload.
+    req.url = req.url.slice(`/${tenantSlug}`.length);
+    next();
+  };
