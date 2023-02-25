@@ -9,6 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "watch": "tsc --watch",
     "lint": "eslint src/**",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
