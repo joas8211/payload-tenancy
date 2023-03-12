@@ -1,6 +1,7 @@
 import { Config } from "payload/config";
 import { Field } from "payload/types";
 import { TenancyOptions } from "../options";
+import { RequestWithTenant } from "../utils/requestWithTenant";
 
 /**
  * @returns Tenant field for generic resources.
@@ -17,9 +18,10 @@ export const createResourceTenantField = ({
   hidden: true,
   hooks: {
     beforeChange: [
-      ({ req: { user } }) => {
+      ({ req }) => {
         // Assign tenant to the document when it's created (or updated).
-        return user?.tenant?.id;
+        const { tenant, user } = req as RequestWithTenant;
+        return tenant?.id || user?.tenant?.id;
       },
     ],
   },
