@@ -18,7 +18,7 @@ export const createRestrictLogin =
     config: Config;
   }): CollectionBeforeLoginHook =>
   async (args) => {
-    if (options.isolationStrategy === "path") {
+    if (["path", "domain"].includes(options.isolationStrategy)) {
       const { user } = args;
       const req = args.req as RequestWithTenant;
       const authorizedTenants = await getAuthorizedTenants({

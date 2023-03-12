@@ -14,11 +14,12 @@ import { createResourceTenantField } from "./fields/resourceTenant";
 import { createTenantParentField } from "./fields/tenantParent";
 import { createUserTenantField } from "./fields/userTenant";
 import { createTenantSlugField } from "./fields/tenantSlug";
+import { createTenantDomainsField } from "./fields/tenantDomains";
 import {
   createTenantAfterChangeHook,
   createTenantBeforeDeleteHook,
 } from "./hooks/tenant";
-import { createPathMapping } from "./middleware/pathMapping";
+import { createInitHook } from "./hooks/init";
 import { createRestrictLogin } from "./hooks/auth";
 
 export const tenancy =
@@ -62,6 +63,7 @@ export const tenancy =
                   options,
                   config,
                 }),
+                createTenantDomainsField({ options, config }),
               ],
               hooks: {
                 ...collection.hooks,
@@ -173,24 +175,6 @@ export const tenancy =
         graphQLPlayground:
           basePath + (config.routes?.graphQLPlayground ?? "/playground"),
       },
-      onInit: async (payload) => {
-        await config.onInit?.(payload);
-
-        if (options.isolationStrategy === "path") {
-          payload.express.use(createPathMapping({ options, config, payload }));
-
-          // Move the added middleware up in the stack as far as possible (after
-          // "expressInit" middleware).
-          const router = payload.express._router;
-          const index = router.stack.findIndex(
-            (layer) => layer.name === "expressInit"
-          );
-          router.stack = [
-            ...router.stack.slice(0, index + 1),
-            ...router.stack.slice(-1),
-            ...router.stack.slice(index + 1, -1),
-          ];
-        }
-      },
+      onInit: createInitHook({ options, config }),
     };
   };

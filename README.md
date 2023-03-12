@@ -13,7 +13,7 @@ instance of Payload CMS.
       can manage and access their children in a hierarchical manner.
 - [x] **Path mapping**: Each tenant can be mapped to its own path to separate
       login pages and to allow access sub-tenants.
-- [ ] **Domain mapping**: Each tenant can be mapped to its own domain to create
+- [x] **Domain mapping**: Each tenant can be mapped to its own domain to create
       clear separation between tenants.
 - [ ] **Tested properly**: The project is tested thoroughly with unit tests,
       e2e tests and manual testing.

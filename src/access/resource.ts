@@ -26,7 +26,7 @@ export const createResourceReadAccess =
       original = createDefaultAccess({ options, payload: args.req.payload });
     }
 
-    return options.isolationStrategy === "path"
+    return ["path", "domain"].includes(options.isolationStrategy)
       ? // Limit requested tenant.
         limitAccess(await original(args), {
           tenant: {
@@ -63,7 +63,7 @@ export const createResourceCreateAccess =
       original = createDefaultAccess({ options, payload: args.req.payload });
     }
 
-    return options.isolationStrategy == "path"
+    return ["path", "domain"].includes(options.isolationStrategy)
       ? original(args)
       : // User must be logged in and have assigned tenant.
         Boolean(args.req.user?.tenant) && original(args);

@@ -22,7 +22,7 @@ export const createAdminAccess =
     original?: (args: unknown) => boolean | Promise<boolean>;
   }) =>
   async (args): Promise<boolean> => {
-    if (options.isolationStrategy === "path") {
+    if (["path", "domain"].includes(options.isolationStrategy)) {
       const req = args.req as RequestWithTenant;
       const authorizedTenants = await getAuthorizedTenants({
         options,

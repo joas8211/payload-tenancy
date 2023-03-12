@@ -24,7 +24,7 @@ export const createTenantReadAccess =
       original = createDefaultAccess({ options, payload: args.req.payload });
     }
 
-    return options.isolationStrategy === "path"
+    return ["path", "domain"].includes(options.isolationStrategy)
       ? // Limit requested tenant or its sub-tenants.
         limitAccess(await original(args), {
           id: {

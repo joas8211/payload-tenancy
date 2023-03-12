@@ -10,11 +10,13 @@ export interface TenancyOptions {
    * Choose a strategy for tenant isolation. Using "user" strategy by default
    * and when there's no tenants yet.
    *
-   * - "user": Detect tenant based on user's tenant field. Does not allow
-   *           anonymous access or access to sub-tenants.
-   * - "path": Additionally to user strategy, detect tenant based on base path.
+   * - "user":   Detect tenant based on user's tenant field. Does not allow
+   *             anonymous access or access to sub-tenants.
+   * - "path":   Use tenant's slug as base path.
+   * - "domain": Detect tenant based on hostname. Remember to remove serverURL
+   *             from config to allow multiple domains.
    */
-  isolationStrategy: "user" | "path";
+  isolationStrategy: "user" | "path" | "domain";
 }
 
 /**

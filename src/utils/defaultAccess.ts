@@ -21,9 +21,9 @@ export const createDefaultAccess =
   async ({ req }) =>
     // User must be logged in and have assigned tenant.
     Boolean(req.user?.tenant) &&
-    (options.isolationStrategy !== "path" ||
-      // If isolation strategy is "path" user must have access to the requested
-      // tenant.
+    (!["path", "domain"].includes(options.isolationStrategy) ||
+      // If isolation strategy is "path" or "domain" user must have access to
+      // the requested tenant.
       (
         await getAuthorizedTenants({
           options,
