@@ -5,7 +5,9 @@ import { createDefaultAccess } from "../utils/defaultAccess";
 import { RequestWithTenant } from "../utils/requestWithTenant";
 
 /**
- * Limits resource access to users that belong to the same tenant.
+ * Limits resource access to resources that belong to the same tenant based on
+ * user's tenant ("user" strategy) or requested tenant ("path" or "domain"
+ * strategy).
  *
  * @returns Collection access control for generic resources
  */

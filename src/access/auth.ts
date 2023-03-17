@@ -4,8 +4,8 @@ import { getAuthorizedTenants } from "../utils/getAuthorizedTenants";
 import { TenancyOptions } from "../options";
 
 /**
- * Limits access to admin UI based on if the path matches user's tenant when
- * isolation strategy is set to "path".
+ * Limits access to admin UI based on isolation strategy. Only "path" and
+ * "domain" strategies are restricted.
  *
  * @returns Collection access control for admin UI
  */

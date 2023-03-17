@@ -37,8 +37,8 @@ export const createTenantReadAccess =
         })
       : // User must be logged in.
         Boolean(args.req.user) &&
-          // Initial user doesn't have an assigned tenant during installation process,
-          // so it's allowed to access tenants to create one.
+          // Initial user doesn't have an assigned tenant during installation
+          // process, so it's allowed to access tenants to create one.
           (!args.req.user.tenant ||
             // Limit access to users's tenant or its sub-tenants.
             limitAccess(await original(args), {
