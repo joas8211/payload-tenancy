@@ -30,8 +30,7 @@ describe("setup", () => {
     await expect(page.url()).toMatch(/\/tenants\/[0-9a-f]+$/);
   });
 
-  // TODO: Refresh permissions after creating root tenant.
-  test.skip("other collections appear after creating root tenant", async () => {
+  test("other collections appear after creating root tenant", async () => {
     await runUntil("rootTenantCreated");
     await expect(page.$("#nav-users")).resolves.not.toBeNull();
   });

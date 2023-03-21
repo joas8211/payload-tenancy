@@ -21,6 +21,7 @@ import {
 } from "./hooks/tenant";
 import { createInitHook } from "./hooks/init";
 import { createRestrictLogin } from "./hooks/auth";
+import { EditViewWithRefresh } from "./views/EditViewWithRefresh";
 
 export const tenancy =
   (partialOptions: Partial<TenancyOptions> = {}): Plugin =>
@@ -81,6 +82,13 @@ export const tenancy =
                     config,
                   }),
                 ],
+              },
+              admin: {
+                components: {
+                  views: {
+                    Edit: EditViewWithRefresh,
+                  },
+                },
               },
             }
           : collection.auth

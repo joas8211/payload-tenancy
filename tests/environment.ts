@@ -27,6 +27,13 @@ class CustomTestEnvironment extends PuppeteerEnvironment {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - bad @swc/register types
       swcRegister({
+        sourceMaps: "inline",
+        jsc: {
+          parser: {
+            syntax: "typescript",
+            tsx: true,
+          },
+        },
         module: {
           type: "commonjs",
         },
