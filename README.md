@@ -15,8 +15,8 @@ instance of Payload CMS.
       login pages and to allow access sub-tenants.
 - [x] **Domain mapping**: Each tenant can be mapped to its own domain to create
       clear separation between tenants.
-- [ ] **Tested properly**: The project is tested thoroughly with unit tests,
-      e2e tests and manual testing.
+- [ ] **Tested properly**: The project is tested thoroughly with unit tests, e2e
+      tests and manual testing.
 
 ## Installation
 
@@ -58,5 +58,3 @@ Some notes about setup:
 - Setup can currently be only made in when using "user" isolation strategy,
   which is the default strategy.
 - When creating initial user, there's tenant field, but it can be left empty.
-- After enabling tenancy plugin you must create the root tenant. After that you
-  might need to reload the page to refresh accesses.
