@@ -1,11 +1,13 @@
-import type { JestConfigWithTsJest } from "ts-jest";
+import type { Config } from "jest";
 
-const jestConfig: JestConfigWithTsJest = {
-  preset: "ts-jest",
+const jestConfig: Config = {
+  transform: {
+    "^.+\\.(t|j)sx?$": "@swc/jest",
+  },
   globalSetup: "jest-environment-puppeteer/setup",
   globalTeardown: "jest-environment-puppeteer/teardown",
-  testEnvironment: "jest-environment-puppeteer",
-  testTimeout: 10_000,
+  testEnvironment: "<rootDir>/tests/environment.ts",
+  testTimeout: 60_000,
   forceExit: true,
 };
 

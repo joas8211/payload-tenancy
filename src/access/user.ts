@@ -13,9 +13,7 @@ import { RequestWithTenant } from "../utils/requestWithTenant";
 export const createUserReadAccess =
   ({
     options,
-    /**
-     * Original access control to take into account.
-     */
+    /** Original access control to take into account. */
     original,
   }: {
     options: TenancyOptions;

@@ -28,9 +28,7 @@ const createAccess =
     return authorizedTenants.includes(parentTenantId);
   };
 
-/**
- * @returns Slug field for tenants.
- */
+/** @returns Slug field for tenants. */
 export const createTenantSlugField = ({
   options,
 }: {

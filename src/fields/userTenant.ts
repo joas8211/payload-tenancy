@@ -29,9 +29,7 @@ const createValidate =
     return true;
   };
 
-/**
- * @returns Tenant field for users.
- */
+/** @returns Tenant field for users. */
 export const createUserTenantField = ({
   options,
 }: {

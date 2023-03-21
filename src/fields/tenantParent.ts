@@ -91,9 +91,7 @@ const createValidate =
     return true;
   };
 
-/**
- * @returns Parent field for tenants.
- */
+/** @returns Parent field for tenants. */
 export const createTenantParentField = ({
   options,
 }: {

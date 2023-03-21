@@ -16,9 +16,7 @@ export const createAdminAccess =
   }: {
     options: TenancyOptions;
     config: Config;
-    /**
-     * Original access control to take into account.
-     */
+    /** Original access control to take into account. */
     original?: (args: unknown) => boolean | Promise<boolean>;
   }) =>
   async (args): Promise<boolean> => {

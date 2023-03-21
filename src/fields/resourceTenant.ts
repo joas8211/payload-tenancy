@@ -3,9 +3,7 @@ import { Field } from "payload/types";
 import { TenancyOptions } from "../options";
 import { RequestWithTenant } from "../utils/requestWithTenant";
 
-/**
- * @returns Tenant field for generic resources.
- */
+/** @returns Tenant field for generic resources. */
 export const createResourceTenantField = ({
   options: { tenantCollection },
 }: {

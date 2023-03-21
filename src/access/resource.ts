@@ -18,9 +18,7 @@ export const createResourceReadAccess =
   }: {
     options: TenancyOptions;
     config: Config;
-    /**
-     * Original access control to take into account.
-     */
+    /** Original access control to take into account. */
     original?: Access;
   }): Access =>
   async (args) => {

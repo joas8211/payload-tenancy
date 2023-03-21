@@ -1,27 +1,23 @@
 import { Config } from "payload/config";
 
 export interface TenancyOptions {
-  /**
-   * Tenant collection slug. Default "tenants".
-   */
+  /** Tenant collection slug. Default "tenants". */
   tenantCollection: string;
 
   /**
    * Choose a strategy for tenant isolation. Using "user" strategy by default
    * and when there's no tenants yet.
    *
-   * - "user":   Detect tenant based on user's tenant field. Does not allow
-   *             anonymous access or access to sub-tenants.
-   * - "path":   Use tenant's slug as base path.
+   * - "user": Detect tenant based on user's tenant field. Does not allow
+   *   anonymous access or access to sub-tenants.
+   * - "path": Use tenant's slug as base path.
    * - "domain": Detect tenant based on hostname. Remember to remove serverURL
-   *             from config to allow multiple domains.
+   *   from config to allow multiple domains.
    */
   isolationStrategy: "user" | "path" | "domain";
 }
 
-/**
- * @returns Validated options with default values filled in.
- */
+/** @returns Validated options with default values filled in. */
 export const validateOptions = ({
   options: { tenantCollection = "tenants", isolationStrategy = "user" },
   config,
@@ -29,7 +25,7 @@ export const validateOptions = ({
   options: Partial<TenancyOptions>;
   config: Config;
 }): TenancyOptions => {
-  const tenantCollectionExists = config.collections.some(
+  const tenantCollectionExists = config.collections?.some(
     (collection) => collection.slug === tenantCollection
   );
   if (!tenantCollectionExists) {
@@ -39,7 +35,7 @@ export const validateOptions = ({
     );
   }
 
-  const authCollectionExists = config.collections.some(
+  const authCollectionExists = config.collections?.some(
     (collection) => collection.auth
   );
   if (!authCollectionExists) {

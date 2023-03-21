@@ -4,7 +4,6 @@
     "outDir": "dist",
     "declaration": true,
     "skipLibCheck": true,
-    "sourceMap": false,
-    "esModuleInterop": true
+    "sourceMap": false
   }
 }
