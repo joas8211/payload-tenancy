@@ -41,4 +41,8 @@ export const createUserTenantField = ({
   relationTo: options.tenantCollection,
   required: true,
   validate: createValidate(options),
+  admin: {
+    condition: () =>
+      !globalThis.location?.pathname.endsWith("/create-first-user"),
+  },
 });

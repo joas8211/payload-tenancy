@@ -5,8 +5,7 @@ describe("setup", () => {
     await payloadReset();
   });
 
-  // TODO: Hide tenant field in user registration.
-  test.skip("tenant field does not show up in user registration", async () => {
+  test("tenant field does not show up in user registration", async () => {
     await runUntil("registrationPageLoaded");
     await expect(page.$("#field-tenant")).resolves.toBeNull();
   });
