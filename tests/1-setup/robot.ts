@@ -1,32 +1,25 @@
-import { rootUser } from "../credentials";
-import { wait } from "../utils";
+import { wait } from "../helpers/common";
+import { firstRootUser } from "./data";
 
-export type State =
-  | "registrationPageLoaded"
-  | "dashboardLoaded"
-  | "rootTenantCreated";
-
-export const runUntil = async (wantedState: State) => {
+export const loadRegistrationPage = async () => {
   await page.goto(`${payloadUrl}/admin`);
   await page.waitForSelector("#field-email");
-  if (wantedState === "registrationPageLoaded") return;
+};
 
-  await page.waitForSelector("#field-email");
-  await page.type("#field-email", rootUser.email);
-  await page.type("#field-password", rootUser.password);
-  await page.type("#field-confirm-password", rootUser.password);
+export const registerRootUser = async () => {
+  await loadRegistrationPage();
+  await page.type("#field-email", firstRootUser.email);
+  await page.type("#field-password", firstRootUser.password);
+  await page.type("#field-confirm-password", firstRootUser.password);
   await wait(500);
   await page.click("[type=submit]");
   await page.waitForNetworkIdle();
-  if (wantedState === "dashboardLoaded") return;
+};
 
-  await page.goto(`${payloadUrl}/admin/collections/tenants/create`);
-  await page.waitForNetworkIdle();
-  await page.type("#field-slug", "root");
-  await page.click("#field-domains .array-field__add-button-wrap button");
-  await page.waitForSelector("#field-domains__0__domain");
-  await page.type("#field-domains__0__domain", "root.local");
-  await page.click("#action-save");
-  await page.waitForNetworkIdle();
-  if (wantedState === "rootTenantCreated") return;
+export const loadDashboard = async () => {
+  await payload.create({
+    collection: "users",
+    data: { email: firstRootUser.email, password: firstRootUser.password },
+  });
+  await login(firstRootUser);
 };

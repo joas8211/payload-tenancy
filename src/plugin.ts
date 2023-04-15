@@ -84,9 +84,12 @@ export const tenancy =
                 ],
               },
               admin: {
+                ...collection.admin,
                 components: {
+                  ...collection.admin?.components,
                   views: {
                     Edit: EditViewWithRefresh,
+                    ...collection.admin?.components?.views,
                   },
                 },
               },

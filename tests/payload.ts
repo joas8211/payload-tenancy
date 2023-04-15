@@ -1,8 +1,6 @@
 import express from "express";
-import { dirname, join } from "path";
 import payload from "payload";
 import { Server } from "http";
-import { stat } from "fs/promises";
 
 export const initPayload = async (configPath: string) => {
   // Pass some configuration through environment variables.
@@ -11,7 +9,7 @@ export const initPayload = async (configPath: string) => {
 
   // Initialize Payload.
   const app = express();
-  await payload.init({
+  const instance = await payload.init({
     secret: "dev",
     mongoURL: "mongodb://localhost",
     express: app,
@@ -30,40 +28,18 @@ export const initPayload = async (configPath: string) => {
   }
 
   return {
+    instance,
     url: "http://" + address,
     reset: async () => {
-      for (const collection of Object.keys(payload.collections)) {
-        const { docs } = await payload.find({ collection });
-        await Promise.all(
-          docs.map(({ id }) => payload.delete({ collection, id }))
-        );
+      for (const collection of Object.values(payload.collections)) {
+        await collection.Model.deleteMany();
       }
+      await payload.config.onInit(payload);
     },
     close: () =>
       new Promise<void>((resolve) => {
-        server.close(() => resolve());
         server.closeAllConnections();
+        server.close(() => resolve());
       }),
   };
-};
-
-export const wait = (time?: number) =>
-  new Promise<void>((resolve) => setTimeout(() => resolve(), time));
-
-export const findClosestFile = async (
-  dir: string,
-  filename: string,
-  rootDir: string
-) => {
-  while (
-    await stat(join(dir, filename))
-      .then((stats) => !stats.isFile())
-      .catch(() => true)
-  ) {
-    dir = dirname(dir);
-    if (!dir || dir === "/" || dir === rootDir) {
-      throw new Error(`Could not find ${filename} close to directory ${dir}`);
-    }
-  }
-  return join(dir, filename);
 };
