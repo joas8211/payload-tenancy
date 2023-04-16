@@ -20,12 +20,12 @@ export const createLocalHelper = (): Helper => {
       } = await payload.find({
         collection: "tenants",
         where: { slug: { equals: user.tenant } },
-        user,
       });
       await payload.create({
         collection: "users",
         data: { email: user.email, password: user.password, tenant },
         user: loggedInUser,
+        overrideAccess: false,
       });
     },
     createTenant: async (tenant: Tenant) => {
@@ -46,6 +46,7 @@ export const createLocalHelper = (): Helper => {
           parent,
         },
         user: loggedInUser,
+        overrideAccess: false,
       });
     },
     deleteUser: async (user: User) => {
@@ -53,6 +54,7 @@ export const createLocalHelper = (): Helper => {
         collection: "users",
         where: { email: { equals: user.email } },
         user: loggedInUser,
+        overrideAccess: false,
       });
     },
     deleteTenant: async (tenant: Tenant) => {
@@ -60,6 +62,7 @@ export const createLocalHelper = (): Helper => {
         collection: "tenants",
         where: { slug: { equals: tenant.slug } },
         user: loggedInUser,
+        overrideAccess: false,
       });
     },
   };

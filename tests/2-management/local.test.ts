@@ -56,7 +56,7 @@ describe("management", () => {
 
   test("root user cannot delete root tenant", async () => {
     const local = createLocalHelper();
-    await expect(deleteRootTenantAsFirstRootUser(local)).rejects.toThrow();
+    await deleteRootTenantAsFirstRootUser(local);
     await expect(
       payload.find({
         collection: "tenants",
@@ -122,9 +122,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot create users for root tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      createThirdRootUserAsFirstSecondLevelUser(local)
-    ).rejects.toThrow();
+    await createThirdRootUserAsFirstSecondLevelUser(local);
     await expect(
       payload.find({
         collection: "users",
@@ -135,9 +133,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot delete root users", async () => {
     const local = createLocalHelper();
-    await expect(
-      deleteSecondRootUserAsFirstSecondLevelUser(local)
-    ).rejects.toThrow();
+    await deleteSecondRootUserAsFirstSecondLevelUser(local);
     await expect(
       payload.find({
         collection: "users",
@@ -148,9 +144,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot delete root tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      deleteRootTenantAsFirstSecondLevelUser(local)
-    ).rejects.toThrow();
+    await deleteRootTenantAsFirstSecondLevelUser(local);
     await expect(
       payload.find({
         collection: "tenants",
@@ -183,9 +177,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot create users to sub-tenants above it's own tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      createThirdSecondLevelUserAsFirstThirdLevelUser(local)
-    ).rejects.toThrow();
+    await createThirdSecondLevelUserAsFirstThirdLevelUser(local);
     await expect(
       payload.find({
         collection: "users",
@@ -196,9 +188,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot delete users from sub-tenants above it's own tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      deleteSecondSecondLevelUserAsFirstThirdLevelUser(local)
-    ).rejects.toThrow();
+    await deleteSecondSecondLevelUserAsFirstThirdLevelUser(local);
     await expect(
       payload.find({
         collection: "users",
@@ -209,9 +199,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot create tenants under sub-tenants above it's own tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      createSecondThirdLevelTenantAsFirstThirdLevelUser(local)
-    ).rejects.toThrow();
+    await createSecondThirdLevelTenantAsFirstThirdLevelUser(local);
     await expect(
       payload.find({
         collection: "tenants",
@@ -222,9 +210,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot delete tenants under sub-tenants above it's own tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      deleteSecondLevelTenantAsFirstThirdLevelUser(local)
-    ).rejects.toThrow();
+    await deleteSecondLevelTenantAsFirstThirdLevelUser(local);
     await expect(
       payload.find({
         collection: "tenants",
@@ -235,9 +221,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot create sub-tenants under root tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      createSecondSecondLevelTenantAsFirstSecondLevelUser(local)
-    ).rejects.toThrow();
+    await createSecondSecondLevelTenantAsFirstSecondLevelUser(local);
     await expect(
       payload.find({
         collection: "tenants",
@@ -248,9 +232,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot delete their own tenant", async () => {
     const local = createLocalHelper();
-    await expect(
-      deleteSecondLevelTenantAsSecondRootUser(local)
-    ).rejects.toThrow();
+    await deleteSecondLevelTenantAsSecondRootUser(local);
     await expect(
       payload.find({
         collection: "tenants",
