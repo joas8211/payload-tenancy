@@ -98,7 +98,7 @@ describe("management", () => {
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
-  test("sub-tenant user can create users under it's sub-tenants", async () => {
+  test("sub-tenant user can create users under it's sub-tenant", async () => {
     const local = createLocalHelper();
     await createFirstThirdLevelUserAsFirstRootUser(local);
     await expect(
@@ -177,7 +177,7 @@ describe("management", () => {
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
-  test("sub-tenant user cannot create users to sub-tenants above it's own tenant", async () => {
+  test("sub-tenant user cannot create users to sub-tenant above it's own tenant", async () => {
     const local = createLocalHelper();
     await createThirdSecondLevelUserAsFirstThirdLevelUser(local).catch(() => {
       // We don't want error to be thrown.
@@ -190,7 +190,7 @@ describe("management", () => {
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
-  test("sub-tenant user cannot delete users from sub-tenants above it's own tenant", async () => {
+  test("sub-tenant user cannot delete users from sub-tenant above it's own tenant", async () => {
     const local = createLocalHelper();
     await deleteSecondSecondLevelUserAsFirstThirdLevelUser(local).catch(() => {
       // We don't want error to be thrown.
@@ -203,7 +203,7 @@ describe("management", () => {
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
-  test("sub-tenant user cannot create tenants under sub-tenants above it's own tenant", async () => {
+  test("sub-tenant user cannot create tenants under sub-tenant above it's own tenant", async () => {
     const local = createLocalHelper();
     await createSecondThirdLevelTenantAsFirstThirdLevelUser(local).catch(() => {
       // We don't want error to be thrown.
@@ -216,7 +216,7 @@ describe("management", () => {
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
-  test("sub-tenant user cannot delete tenants under sub-tenants above it's own tenant", async () => {
+  test("sub-tenant user cannot delete tenants under sub-tenant above it's own tenant", async () => {
     const local = createLocalHelper();
     await deleteSecondLevelTenantAsFirstThirdLevelUser(local);
     await expect(
