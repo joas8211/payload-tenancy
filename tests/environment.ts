@@ -36,7 +36,7 @@ class CustomTestEnvironment extends PuppeteerEnvironment {
   async setup(): Promise<void> {
     await super.setup();
 
-    if (/[/\\.](admin|api)\.test\.ts$/.test(this.testPath)) {
+    if (/[/\\.](admin|local|rest|graphql)\.test\.ts$/.test(this.testPath)) {
       const configPath = await findClosestFile(
         dirname(this.testPath),
         "payload.config.ts",

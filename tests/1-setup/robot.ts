@@ -1,5 +1,8 @@
+import { createAdminHelper } from "../helpers/admin";
 import { wait } from "../helpers/common";
 import { firstRootUser } from "./data";
+
+const admin = createAdminHelper();
 
 export const loadRegistrationPage = async () => {
   await page.goto(`${payloadUrl}/admin`);
@@ -21,5 +24,5 @@ export const loadDashboard = async () => {
     collection: "users",
     data: { email: firstRootUser.email, password: firstRootUser.password },
   });
-  await login(firstRootUser);
+  await admin.login(firstRootUser);
 };

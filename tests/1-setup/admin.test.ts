@@ -1,5 +1,8 @@
+import { createAdminHelper } from "../helpers/admin";
 import { rootTenant } from "./data";
 import { loadDashboard, loadRegistrationPage, registerRootUser } from "./robot";
+
+const admin = createAdminHelper();
 
 describe("setup", () => {
   beforeEach(async () => {
@@ -27,13 +30,13 @@ describe("setup", () => {
 
   test("can create root tenant", async () => {
     await loadDashboard();
-    await createTenant(rootTenant);
+    await admin.createTenant(rootTenant);
     await expect(page.url()).toMatch(/\/tenants\/[0-9a-f]+$/);
   });
 
   test("other collections appear after creating root tenant", async () => {
     await loadDashboard();
-    await createTenant(rootTenant);
+    await admin.createTenant(rootTenant);
     await expect(page.$("#nav-users")).resolves.not.toBeNull();
   });
 });
