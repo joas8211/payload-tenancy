@@ -61,6 +61,7 @@ export const createTenantReadAccess =
 export const createTenantDeleteAccess =
   ({
     options,
+    config,
     original,
   }: {
     options: TenancyOptions;
@@ -68,15 +69,13 @@ export const createTenantDeleteAccess =
     original?: Access;
   }): Access =>
   async (args) => {
-    if (!original) {
-      original = createDefaultAccess({ options, payload: args.req.payload });
-    }
+    const readAccess = createTenantReadAccess({ options, config, original });
 
     return (
       // User must be logged in and have assigned tenant.
       Boolean(args.req.user?.tenant) &&
       // Limit access to non-root tenants.
-      limitAccess(await original(args), {
+      limitAccess(await readAccess(args), {
         parent: {
           exists: true,
         },
