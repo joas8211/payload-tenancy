@@ -6,90 +6,201 @@ import {
   firstSecondLevelUser,
   firstThirdLevelUser,
   fourthLevelTenant,
+  rootTenant,
   secondLevelTenant,
   secondRootUser,
+  secondSecondLevelTenant,
   secondSecondLevelUser,
+  secondThirdLevelTenant,
   thirdLevelTenant,
+  thirdRootUser,
+  thirdSecondLevelUser,
 } from "./data";
 
-export const createSecondRootUser = async (helper: Helper) => {
+export const createSecondRootUserAsFirstRootUser = async (helper: Helper) => {
   await helper.login(firstRootUser);
   await helper.createUser(secondRootUser);
 };
 
-export const createSecondLevelTenant = async (helper: Helper) => {
+export const deleteRootTenantAsFirstRootUser = async (helper: Helper) => {
   const local = createLocalHelper();
-  await createSecondRootUser(local);
+  await createSecondRootUserAsFirstRootUser(local);
+  await helper.login(firstRootUser);
+  await helper.deleteTenant(rootTenant);
+};
+
+export const createSecondLevelTenantAsFirstRootUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await createSecondRootUserAsFirstRootUser(local);
   await helper.login(firstRootUser);
   await helper.createTenant(secondLevelTenant);
 };
 
-export const createFirstSecondLevelUser = async (helper: Helper) => {
+export const createFirstSecondLevelUserAsFirstRootUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await createSecondLevelTenant(local);
+  await createSecondLevelTenantAsFirstRootUser(local);
   await helper.login(firstRootUser);
   await helper.createUser(firstSecondLevelUser);
 };
 
-export const createThirdLevelTenant = async (helper: Helper) => {
+export const createThirdLevelTenantAsFirstRootUser = async (helper: Helper) => {
   const local = createLocalHelper();
-  await createFirstSecondLevelUser(local);
+  await createFirstSecondLevelUserAsFirstRootUser(local);
   await helper.login(firstRootUser);
   await helper.createTenant(thirdLevelTenant);
 };
 
-export const createFirstThirdLevelUser = async (helper: Helper) => {
+export const createFirstThirdLevelUserAsFirstRootUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await createThirdLevelTenant(local);
+  await createThirdLevelTenantAsFirstRootUser(local);
   await helper.login(firstRootUser);
   await helper.createUser(firstThirdLevelUser);
 };
 
-export const createSecondSecondLevelUser = async (helper: Helper) => {
+export const createSecondSecondLevelUserAsFirstSecondLevelUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await createFirstThirdLevelUser(local);
+  await createFirstThirdLevelUserAsFirstRootUser(local);
   await helper.login(firstSecondLevelUser);
   await helper.createUser(secondSecondLevelUser);
 };
 
-export const createFourthLevelTenant = async (helper: Helper) => {
+export const createThirdRootUserAsFirstSecondLevelUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await createSecondSecondLevelUser(local);
+  await createSecondSecondLevelUserAsFirstSecondLevelUser(local);
+  await helper.login(firstSecondLevelUser);
+  await helper.createUser(thirdRootUser);
+};
+
+export const deleteSecondRootUserAsFirstSecondLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await createSecondSecondLevelUserAsFirstSecondLevelUser(local);
+  await helper.login(firstSecondLevelUser);
+  await helper.deleteUser(secondRootUser);
+};
+
+export const deleteRootTenantAsFirstSecondLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await createSecondSecondLevelUserAsFirstSecondLevelUser(local);
+  await helper.login(firstSecondLevelUser);
+  await helper.deleteTenant(rootTenant);
+};
+
+export const createFourthLevelTenantAsFirstSecondLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await createSecondSecondLevelUserAsFirstSecondLevelUser(local);
   await helper.login(firstSecondLevelUser);
   await helper.createTenant(fourthLevelTenant);
 };
 
-export const createFifthLevelTenant = async (helper: Helper) => {
+export const createFifthLevelTenantAsFirstThirdLevelUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await createFourthLevelTenant(local);
+  await createFourthLevelTenantAsFirstSecondLevelUser(local);
   await helper.login(firstThirdLevelUser);
   await helper.createTenant(fifthLevelTenant);
 };
 
-export const deleteFifthLevelTenant = async (helper: Helper) => {
+export const deleteFifthLevelTenantAsFirstThirdLevelUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await createFifthLevelTenant(local);
+  await createFifthLevelTenantAsFirstThirdLevelUser(local);
   await helper.login(firstThirdLevelUser);
   await helper.deleteTenant(fifthLevelTenant);
 };
 
-export const deleteFirstSecondLevelUser = async (helper: Helper) => {
+export const createThirdSecondLevelUserAsFirstThirdLevelUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await deleteFifthLevelTenant(local);
+  await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
+  await helper.login(firstThirdLevelUser);
+  await helper.createUser(thirdSecondLevelUser);
+};
+
+export const deleteSecondSecondLevelUserAsFirstThirdLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
+  await helper.login(firstThirdLevelUser);
+  await helper.deleteUser(secondSecondLevelUser);
+};
+
+export const createSecondThirdLevelTenantAsFirstThirdLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
+  await helper.login(firstThirdLevelUser);
+  await helper.createTenant(secondThirdLevelTenant);
+};
+
+export const deleteSecondLevelTenantAsFirstThirdLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
+  await helper.login(firstThirdLevelUser);
+  await helper.deleteTenant(secondLevelTenant);
+};
+
+export const createSecondSecondLevelTenantAsFirstSecondLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
+  await helper.login(firstSecondLevelUser);
+  await helper.createTenant(secondSecondLevelTenant);
+};
+
+export const deleteSecondLevelTenantAsFirstSecondLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
+  await helper.login(firstSecondLevelUser);
+  await helper.deleteTenant(secondLevelTenant);
+};
+
+export const deleteFirstSecondLevelUserAsSecondSecondLevelUser = async (
+  helper: Helper
+) => {
+  const local = createLocalHelper();
+  await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
   await helper.login(secondSecondLevelUser);
   await helper.deleteUser(firstSecondLevelUser);
 };
 
-export const deleteSecondLevelTenant = async (helper: Helper) => {
+export const deleteSecondLevelTenantAsSecondRootUser = async (
+  helper: Helper
+) => {
   const local = createLocalHelper();
-  await deleteFirstSecondLevelUser(local);
+  await deleteFirstSecondLevelUserAsSecondSecondLevelUser(local);
   await helper.login(secondRootUser);
   await helper.deleteTenant(secondLevelTenant);
 };
 
-export const deleteFirstRootUser = async (helper: Helper) => {
+export const deleteFirstRootUserAsSecondRootUser = async (helper: Helper) => {
   const local = createLocalHelper();
-  await deleteSecondLevelTenant(local);
+  await deleteSecondLevelTenantAsSecondRootUser(local);
   await helper.login(secondRootUser);
   await helper.deleteUser(firstRootUser);
 };
