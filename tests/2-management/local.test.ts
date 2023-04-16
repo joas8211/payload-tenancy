@@ -122,7 +122,9 @@ describe("management", () => {
 
   test("sub-tenant user cannot create users for root tenant", async () => {
     const local = createLocalHelper();
-    await createThirdRootUserAsFirstSecondLevelUser(local);
+    await createThirdRootUserAsFirstSecondLevelUser(local).catch(() => {
+      // We don't want error to be thrown.
+    });
     await expect(
       payload.find({
         collection: "users",
@@ -177,7 +179,9 @@ describe("management", () => {
 
   test("sub-tenant user cannot create users to sub-tenants above it's own tenant", async () => {
     const local = createLocalHelper();
-    await createThirdSecondLevelUserAsFirstThirdLevelUser(local);
+    await createThirdSecondLevelUserAsFirstThirdLevelUser(local).catch(() => {
+      // We don't want error to be thrown.
+    });
     await expect(
       payload.find({
         collection: "users",
@@ -188,7 +192,9 @@ describe("management", () => {
 
   test("sub-tenant user cannot delete users from sub-tenants above it's own tenant", async () => {
     const local = createLocalHelper();
-    await deleteSecondSecondLevelUserAsFirstThirdLevelUser(local);
+    await deleteSecondSecondLevelUserAsFirstThirdLevelUser(local).catch(() => {
+      // We don't want error to be thrown.
+    });
     await expect(
       payload.find({
         collection: "users",
@@ -199,7 +205,9 @@ describe("management", () => {
 
   test("sub-tenant user cannot create tenants under sub-tenants above it's own tenant", async () => {
     const local = createLocalHelper();
-    await createSecondThirdLevelTenantAsFirstThirdLevelUser(local);
+    await createSecondThirdLevelTenantAsFirstThirdLevelUser(local).catch(() => {
+      // We don't want error to be thrown.
+    });
     await expect(
       payload.find({
         collection: "tenants",
@@ -221,7 +229,11 @@ describe("management", () => {
 
   test("sub-tenant user cannot create sub-tenants under root tenant", async () => {
     const local = createLocalHelper();
-    await createSecondSecondLevelTenantAsFirstSecondLevelUser(local);
+    await createSecondSecondLevelTenantAsFirstSecondLevelUser(local).catch(
+      () => {
+        // We don't want error to be thrown.
+      }
+    );
     await expect(
       payload.find({
         collection: "tenants",
