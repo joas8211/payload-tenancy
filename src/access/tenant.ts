@@ -53,7 +53,7 @@ export const createTenantReadAccess =
   };
 
 /**
- * Limits deletion of root tenant.
+ * Limits deletion of current tenant or above tenants.
  *
  * @param original Original access control to take into account.
  * @returns Collection access control for tenants
@@ -61,7 +61,6 @@ export const createTenantReadAccess =
 export const createTenantDeleteAccess =
   ({
     options,
-    config,
     original,
   }: {
     options: TenancyOptions;
@@ -69,16 +68,33 @@ export const createTenantDeleteAccess =
     original?: Access;
   }): Access =>
   async (args) => {
-    const readAccess = createTenantReadAccess({ options, config, original });
+    if (!original) {
+      original = createDefaultAccess({ options, payload: args.req.payload });
+    }
 
     return (
       // User must be logged in and have assigned tenant.
       Boolean(args.req.user?.tenant) &&
-      // Limit access to non-root tenants.
-      limitAccess(await readAccess(args), {
-        parent: {
-          exists: true,
-        },
-      })
+        ["path", "domain"].includes(options.isolationStrategy)
+        ? // Allow deletion of tenants below requested tenant.
+          limitAccess(await original(args), {
+            parent: {
+              in: await getAuthorizedTenants({
+                options,
+                payload: args.req.payload,
+                tenantId: (args.req as RequestWithTenant).tenant.id,
+              }),
+            },
+          })
+        : // Allow deletion of tenants below users's tenant.
+          limitAccess(await original(args), {
+            parent: {
+              in: await getAuthorizedTenants({
+                options,
+                payload: args.req.payload,
+                tenantId: args.req.user.tenant.id,
+              }),
+            },
+          })
     );
   };
