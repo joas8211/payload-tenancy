@@ -32,6 +32,7 @@ import {
   deleteFirstSecondLevelUserAsSecondSecondLevelUser,
   deleteRootTenantAsFirstRootUser,
   deleteRootTenantAsFirstSecondLevelUser,
+  deleteSecondLevelTenantAsFirstSecondLevelUser,
   deleteSecondLevelTenantAsFirstThirdLevelUser,
   deleteSecondLevelTenantAsSecondRootUser,
   deleteSecondRootUserAsFirstSecondLevelUser,
@@ -244,7 +245,7 @@ describe("management", () => {
 
   test("sub-tenant user cannot delete their own tenant", async () => {
     const local = createLocalHelper();
-    await deleteSecondLevelTenantAsSecondRootUser(local);
+    await deleteSecondLevelTenantAsFirstSecondLevelUser(local);
     await expect(
       payload.find({
         collection: "tenants",
