@@ -75,7 +75,7 @@ export const createTenantDeleteAccess =
     return (
       // User must be logged in and have assigned tenant.
       Boolean(args.req.user?.tenant) &&
-        ["path", "domain"].includes(options.isolationStrategy)
+      (["path", "domain"].includes(options.isolationStrategy)
         ? // Allow deletion of tenants below requested tenant.
           limitAccess(await original(args), {
             parent: {
@@ -95,6 +95,6 @@ export const createTenantDeleteAccess =
                 tenantId: args.req.user.tenant.id,
               }),
             },
-          })
+          }))
     );
   };
