@@ -17,6 +17,9 @@ const createAccess =
         .totalDocs > 0;
     if (!someTenantExist) return false;
 
+    // User must be logged in and have assigned tenant.
+    if (!user?.tenant) return false;
+
     // Allow tenant creation with parent.
     if (!doc) return true;
 
@@ -71,6 +74,10 @@ const createValidate =
     if (!value) {
       return "Required";
     }
+
+    // After this all further validations are focusing on the user. If there's
+    // no user, the action is done programmatically and it's ok.
+    if (!user) return true;
 
     // At this stage if user has no tenant, user has already created the root
     // tenant and is trying to create another tenant, but somehow the tenant is
