@@ -1,12 +1,16 @@
+import { Payload } from "payload";
 import { Helper, Tenant, User } from "./common";
 
-export const createLocalHelper = (): Helper => {
+export const createLocalHelper = (
+  options: { payload?: Payload; overrideAccess?: boolean } = {}
+): Helper => {
+  const instance = options.payload || payload;
   let loggedInUser: unknown;
   return {
     login: async (user: User) => {
       ({
         docs: [loggedInUser],
-      } = await payload.find({
+      } = await instance.find({
         collection: "users",
         where: { email: { equals: user.email } },
       }));
@@ -17,15 +21,15 @@ export const createLocalHelper = (): Helper => {
     createUser: async (user: User) => {
       const {
         docs: [{ id: tenant }],
-      } = await payload.find({
+      } = await instance.find({
         collection: "tenants",
         where: { slug: { equals: user.tenant } },
       });
-      await payload.create({
+      await instance.create({
         collection: "users",
         data: { email: user.email, password: user.password, tenant },
         user: loggedInUser,
-        overrideAccess: false,
+        overrideAccess: Boolean(options.overrideAccess),
       });
     },
     createTenant: async (tenant: Tenant) => {
@@ -33,12 +37,12 @@ export const createLocalHelper = (): Helper => {
       if (tenant.parent) {
         ({
           docs: [{ id: parent }],
-        } = await payload.find({
+        } = await instance.find({
           collection: "tenants",
           where: { slug: { equals: tenant.parent } },
         }));
       }
-      await payload.create({
+      await instance.create({
         collection: "tenants",
         data: {
           slug: tenant.slug,
@@ -46,23 +50,23 @@ export const createLocalHelper = (): Helper => {
           parent,
         },
         user: loggedInUser,
-        overrideAccess: false,
+        overrideAccess: Boolean(options.overrideAccess),
       });
     },
     deleteUser: async (user: User) => {
-      await payload.delete({
+      await instance.delete({
         collection: "users",
         where: { email: { equals: user.email } },
         user: loggedInUser,
-        overrideAccess: false,
+        overrideAccess: Boolean(options.overrideAccess),
       });
     },
     deleteTenant: async (tenant: Tenant) => {
-      await payload.delete({
+      await instance.delete({
         collection: "tenants",
         where: { slug: { equals: tenant.slug } },
         user: loggedInUser,
-        overrideAccess: false,
+        overrideAccess: Boolean(options.overrideAccess),
       });
     },
   };

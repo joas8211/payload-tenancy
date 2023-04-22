@@ -1,6 +1,18 @@
 import { buildConfig } from "payload/config";
 import { tenancy } from "../../src/plugin";
-import { firstRootUser, rootTenant } from "./data";
+import {
+  firstRootUser,
+  firstSecondLevelUser,
+  firstSecondSecondLevelUser,
+  firstSecondThirdLevelUser,
+  firstThirdLevelUser,
+  rootTenant,
+  secondLevelTenant,
+  secondSecondLevelTenant,
+  secondThirdLevelTenant,
+  thirdLevelTenant,
+} from "./data";
+import { createLocalHelper } from "../helpers/local";
 
 export default buildConfig({
   plugins: [tenancy({ isolationStrategy: "user" })],
@@ -34,16 +46,26 @@ export default buildConfig({
     user: "users",
   },
   onInit: async (payload) => {
-    await payload.create({
-      collection: "users",
-      data: { email: firstRootUser.email, password: firstRootUser.password },
-    });
-    await payload.create({
-      collection: "tenants",
-      data: {
-        slug: rootTenant.slug,
-        domains: rootTenant.domains.map((domain) => ({ domain })),
-      },
-    });
+    const local = createLocalHelper({ payload, overrideAccess: true });
+
+    for (const tenant of [
+      rootTenant,
+      secondLevelTenant,
+      thirdLevelTenant,
+      secondSecondLevelTenant,
+      secondThirdLevelTenant,
+    ]) {
+      await local.createTenant(tenant);
+    }
+
+    for (const user of [
+      firstRootUser,
+      firstSecondLevelUser,
+      firstThirdLevelUser,
+      firstSecondSecondLevelUser,
+      firstSecondThirdLevelUser,
+    ]) {
+      await local.createUser(user);
+    }
   },
 });
