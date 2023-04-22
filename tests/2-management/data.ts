@@ -73,7 +73,7 @@ export const fifthLevelTenant: Tenant = {
 
 export const secondSecondLevelTenant: Tenant = {
   slug: "second-second",
-  domains: ["second-seoncd.root.local"],
+  domains: ["second-second.root.local"],
   parent: rootTenant.slug,
 };
 
