@@ -11,13 +11,14 @@ extensions.
 - unit.test.ts - Tests code directly by importing it.
 - admin.test.ts - Tests functionality as admin panel user through browser using
   Puppeteer.
-- api.test.ts - Tests functionality as API client using Rest or GraphQL.
+- local.test.ts - Tests functionality using Local API.
+- graphql.test.ts - Tests functionality as GraphQL API client.
+- rest.test.ts - Tests functionality as Rest API client.
 
 ## Folder structure
 
-Tests are structured so that the first folders are stages of the plugin's life
-that are ordered by number prefix (eg. "0-configuration/"), and inner folders
-are different scenarios at that stage.
+- Test scenarios can be found from "scenarios" directory where each folder
+  represents one scenario or feature to test.
 
 ## Server
 
@@ -31,9 +32,7 @@ global variables that can be used to interact with the server.
 
 ## Robot
 
-Use file robot.ts in tests to automate the browser to wanted state. robot.ts
-should be a module that exports an async function `runUntil` that accepts name
-of the wanted state as parameter.
+Use file robot.ts in tests to automate the test scenario to wanted state.
 
 ## Development command
 

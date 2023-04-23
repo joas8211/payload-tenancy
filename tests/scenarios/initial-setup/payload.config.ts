@@ -1,5 +1,5 @@
 import { buildConfig } from "payload/config";
-import { tenancy } from "../../src/plugin";
+import { tenancy } from "../../../src/plugin";
 
 export default buildConfig({
   plugins: [tenancy({ isolationStrategy: "user" })],

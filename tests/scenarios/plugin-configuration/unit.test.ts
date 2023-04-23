@@ -1,5 +1,5 @@
 import { CollectionConfig } from "payload/types";
-import { tenancy } from "../../src/plugin";
+import { tenancy } from "../../../src/plugin";
 
 const auth = (slug: string): CollectionConfig => ({
   slug,

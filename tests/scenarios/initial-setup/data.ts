@@ -1,4 +1,4 @@
-import { Tenant, User } from "../helpers/common";
+import { Tenant, User } from "../../helpers/common";
 
 export const rootTenant: Tenant = {
   slug: "root",

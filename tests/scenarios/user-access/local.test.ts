@@ -1,4 +1,4 @@
-import { createLocalHelper } from "../helpers/local";
+import { createLocalHelper } from "../../helpers/local";
 import {
   fifthLevelTenant,
   firstRootUser,

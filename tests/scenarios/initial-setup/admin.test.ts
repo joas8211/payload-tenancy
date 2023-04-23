@@ -1,4 +1,4 @@
-import { createAdminHelper } from "../helpers/admin";
+import { createAdminHelper } from "../../helpers/admin";
 import { rootTenant } from "./data";
 import { loadDashboard, loadRegistrationPage, registerRootUser } from "./robot";
 

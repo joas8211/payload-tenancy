@@ -1,5 +1,5 @@
-import { createAdminHelper } from "../helpers/admin";
-import { wait } from "../helpers/common";
+import { createAdminHelper } from "../../helpers/admin";
+import { wait } from "../../helpers/common";
 import { firstRootUser } from "./data";
 
 const admin = createAdminHelper();

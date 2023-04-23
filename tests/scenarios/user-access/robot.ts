@@ -1,5 +1,5 @@
-import { Helper } from "../helpers/common";
-import { createLocalHelper } from "../helpers/local";
+import { Helper } from "../../helpers/common";
+import { createLocalHelper } from "../../helpers/local";
 import {
   fifthLevelTenant,
   firstRootUser,

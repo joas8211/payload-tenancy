@@ -1,5 +1,5 @@
 import { buildConfig } from "payload/config";
-import { tenancy } from "../../src/plugin";
+import { tenancy } from "../../../src/plugin";
 import { firstRootUser, rootTenant } from "./data";
 
 export default buildConfig({
@@ -19,6 +19,15 @@ export default buildConfig({
       admin: {
         useAsTitle: "slug",
       },
+    },
+    {
+      slug: "pages",
+      fields: [
+        {
+          name: "title",
+          type: "text",
+        },
+      ],
     },
   ],
   admin: {
