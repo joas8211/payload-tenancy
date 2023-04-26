@@ -1,7 +1,10 @@
+import { User } from "../../helpers/common";
 import { createLocalHelper } from "../../helpers/local";
 import {
   fifthLevelTenant,
+  firstRootPost,
   firstRootUser,
+  firstSecondLevelPost,
   firstSecondLevelUser,
   firstThirdLevelUser,
   fourthLevelTenant,
@@ -16,6 +19,8 @@ import {
   thirdSecondLevelUser,
 } from "./data";
 import {
+  createFirstRootPostAsFirstRootUser,
+  createFirstSecondLevelPostAsFirstSecondLevelUser,
   createFirstSecondLevelUserAsFirstRootUser,
   createFirstThirdLevelUserAsFirstRootUser,
   createFourthLevelTenantAsFirstSecondLevelUser,
@@ -39,7 +44,16 @@ import {
   deleteSecondSecondLevelUserAsFirstThirdLevelUser,
 } from "./robot";
 
-describe("management", () => {
+const getUserDocument = async (user: User) => {
+  return (
+    await payload.find({
+      collection: "users",
+      where: { email: { equals: user.email } },
+    })
+  ).docs[0];
+};
+
+describe("user access", () => {
   beforeEach(async () => {
     await payloadReset();
   });
@@ -99,7 +113,7 @@ describe("management", () => {
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
-  test("sub-tenant user can create users under it's sub-tenant", async () => {
+  test("root user can create users under sub-tenant's sub-tenants", async () => {
     const local = createLocalHelper();
     await createFirstThirdLevelUserAsFirstRootUser(local);
     await expect(
@@ -108,6 +122,40 @@ describe("management", () => {
         where: { email: { equals: firstThirdLevelUser.email } },
       })
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
+  });
+
+  test("root user can create posts", async () => {
+    const local = createLocalHelper();
+    await createFirstRootPostAsFirstRootUser(local);
+    await expect(
+      payload.find({
+        collection: "posts",
+        where: { title: { equals: firstRootPost.title } },
+        user: await getUserDocument(firstRootUser),
+        overrideAccess: false,
+      })
+    ).resolves.toEqual(
+      expect.objectContaining({
+        totalDocs: 1,
+      })
+    );
+  });
+
+  test("sub-tenant user cannot see root tenant posts", async () => {
+    const local = createLocalHelper();
+    await createFirstRootPostAsFirstRootUser(local);
+    await expect(
+      payload.find({
+        collection: "posts",
+        where: { title: { equals: firstRootPost.title } },
+        user: await getUserDocument(firstSecondLevelUser),
+        overrideAccess: false,
+      })
+    ).resolves.toEqual(
+      expect.objectContaining({
+        totalDocs: 0,
+      })
+    );
   });
 
   test("sub-tenant user can create users for it's own tenant", async () => {
@@ -119,6 +167,40 @@ describe("management", () => {
         where: { email: { equals: secondSecondLevelUser.email } },
       })
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
+  });
+
+  test("sub-tenant user can create posts", async () => {
+    const local = createLocalHelper();
+    await createFirstSecondLevelPostAsFirstSecondLevelUser(local);
+    await expect(
+      payload.find({
+        collection: "posts",
+        where: { title: { equals: firstSecondLevelPost.title } },
+        user: await getUserDocument(firstSecondLevelUser),
+        overrideAccess: false,
+      })
+    ).resolves.toEqual(
+      expect.objectContaining({
+        totalDocs: 1,
+      })
+    );
+  });
+
+  test("root user cannot see sub-tenant's posts", async () => {
+    const local = createLocalHelper();
+    await createFirstSecondLevelPostAsFirstSecondLevelUser(local);
+    await expect(
+      payload.find({
+        collection: "posts",
+        where: { title: { equals: firstSecondLevelPost.title } },
+        user: await getUserDocument(firstRootUser),
+        overrideAccess: false,
+      })
+    ).resolves.toEqual(
+      expect.objectContaining({
+        totalDocs: 0,
+      })
+    );
   });
 
   test("sub-tenant user cannot create users for root tenant", async () => {

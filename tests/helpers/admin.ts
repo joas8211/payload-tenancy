@@ -1,4 +1,4 @@
-import { Helper, Tenant, User, wait } from "./common";
+import { Helper, Post, Tenant, User, wait } from "./common";
 
 export const createAdminHelper = (): Helper => ({
   login: async (credentials: User) => {
@@ -51,6 +51,14 @@ export const createAdminHelper = (): Helper => ({
     await page.click("#action-save");
     await page.waitForNetworkIdle();
   },
+  createPost: async (post: Post) => {
+    await page.goto(`${payloadUrl}/admin/collections/posts/create`);
+    await page.waitForNetworkIdle();
+    await page.type("#field-title", post.title);
+    await wait(500);
+    await page.click("#action-save");
+    await page.waitForNetworkIdle();
+  },
   deleteUser: async (user: User) => {
     await page.goto(`${payloadUrl}/admin/collections/users`);
     await page.waitForNetworkIdle();
@@ -67,6 +75,18 @@ export const createAdminHelper = (): Helper => ({
     await page.goto(`${payloadUrl}/admin/collections/tenants`);
     await page.waitForNetworkIdle();
     await page.type(".search-filter__input", tenant.slug);
+    await page.waitForNetworkIdle();
+    await page.click(".row-1 .cell-slug a");
+    await page.waitForNetworkIdle();
+    await page.click("#action-delete");
+    await page.waitForNetworkIdle();
+    await page.click("#confirm-delete");
+    await page.waitForNetworkIdle();
+  },
+  deletePost: async (post: Post) => {
+    await page.goto(`${payloadUrl}/admin/collections/posts`);
+    await page.waitForNetworkIdle();
+    await page.type(".search-filter__input", post.title);
     await page.waitForNetworkIdle();
     await page.click(".row-1 .cell-slug a");
     await page.waitForNetworkIdle();

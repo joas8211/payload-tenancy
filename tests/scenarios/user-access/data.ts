@@ -1,4 +1,4 @@
-import { Tenant, User } from "../../helpers/common";
+import { Post, Tenant, User } from "../../helpers/common";
 
 export const rootTenant: Tenant = {
   slug: "root",
@@ -23,6 +23,10 @@ export const thirdRootUser: User = {
   tenant: rootTenant.slug,
 };
 
+export const firstRootPost: Post = {
+  title: "First Root Post",
+};
+
 export const secondLevelTenant: Tenant = {
   slug: "second",
   domains: ["second.root.local"],
@@ -45,6 +49,10 @@ export const thirdSecondLevelUser: User = {
   email: "third.user@second.root.local",
   password: "test",
   tenant: secondLevelTenant.slug,
+};
+
+export const firstSecondLevelPost: Post = {
+  title: "First Second Level Post",
 };
 
 export const thirdLevelTenant: Tenant = {

@@ -21,7 +21,7 @@ export default buildConfig({
       },
     },
     {
-      slug: "pages",
+      slug: "posts",
       fields: [
         {
           name: "title",

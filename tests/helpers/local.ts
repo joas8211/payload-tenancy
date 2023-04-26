@@ -1,5 +1,5 @@
 import { Payload } from "payload";
-import { Helper, Tenant, User } from "./common";
+import { Helper, Post, Tenant, User } from "./common";
 
 export const createLocalHelper = (
   options: { payload?: Payload; overrideAccess?: boolean } = {}
@@ -53,6 +53,16 @@ export const createLocalHelper = (
         overrideAccess: Boolean(options.overrideAccess),
       });
     },
+    createPost: async (post: Post) => {
+      await instance.create({
+        collection: "posts",
+        data: {
+          title: post.title,
+        },
+        user: loggedInUser,
+        overrideAccess: Boolean(options.overrideAccess),
+      });
+    },
     deleteUser: async (user: User) => {
       await instance.delete({
         collection: "users",
@@ -65,6 +75,14 @@ export const createLocalHelper = (
       await instance.delete({
         collection: "tenants",
         where: { slug: { equals: tenant.slug } },
+        user: loggedInUser,
+        overrideAccess: Boolean(options.overrideAccess),
+      });
+    },
+    deletePost: async (post: Post) => {
+      await instance.delete({
+        collection: "posts",
+        where: { title: { equals: post.title } },
         user: loggedInUser,
         overrideAccess: Boolean(options.overrideAccess),
       });

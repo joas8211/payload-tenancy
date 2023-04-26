@@ -4,7 +4,7 @@ import { loadDashboard, loadRegistrationPage, registerRootUser } from "./robot";
 
 const admin = createAdminHelper();
 
-describe("setup", () => {
+describe("initial setup", () => {
   beforeEach(async () => {
     await payloadReset();
   });

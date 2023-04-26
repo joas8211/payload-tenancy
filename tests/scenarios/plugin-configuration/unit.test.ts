@@ -12,7 +12,7 @@ const tenants = (slug: string): CollectionConfig => ({
   fields: [],
 });
 
-describe("configuration", () => {
+describe("plugin configuration", () => {
   test("validates auth collection exists", () => {
     expect(() => tenancy()({ collections: [tenants("tenants")] })).toThrow();
     expect(() =>

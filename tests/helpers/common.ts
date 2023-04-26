@@ -10,13 +10,19 @@ export interface Tenant {
   parent?: string;
 }
 
+export interface Post {
+  title: string;
+}
+
 export interface Helper {
   login: (user: User) => Promise<void>;
   logout: () => Promise<void>;
   createUser: (user: User) => Promise<void>;
   createTenant: (tenant: Tenant) => Promise<void>;
+  createPost: (page: Post) => Promise<void>;
   deleteUser: (user: User) => Promise<void>;
   deleteTenant: (tenant: Tenant) => Promise<void>;
+  deletePost: (page: Post) => Promise<void>;
 }
 
 export const wait = (time?: number) =>
