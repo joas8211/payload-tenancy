@@ -25,7 +25,7 @@ export const createSecondRootUserAsFirstRootUser = async (helper: Helper) => {
   await helper.createUser(secondRootUser);
 };
 
-/** Good */
+/** Bad */
 export const deleteRootTenantAsFirstRootUser = async (helper: Helper) => {
   const local = createLocalHelper();
   await createSecondRootUserAsFirstRootUser(local);

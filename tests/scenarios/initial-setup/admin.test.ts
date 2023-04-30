@@ -1,8 +1,10 @@
 import { createAdminHelper } from "../../helpers/admin";
-import { rootTenant } from "./data";
-import { loadDashboard, loadRegistrationPage, registerRootUser } from "./robot";
-
-const admin = createAdminHelper();
+import {
+  createRootTenant,
+  duplicateRootTenant,
+  loadRegistrationPage,
+  registerRootUser,
+} from "./robot";
 
 describe("initial setup", () => {
   beforeEach(async () => {
@@ -29,14 +31,20 @@ describe("initial setup", () => {
   });
 
   test("can create root tenant", async () => {
-    await loadDashboard();
-    await admin.createTenant(rootTenant);
+    const admin = createAdminHelper();
+    await createRootTenant(admin);
     await expect(page.url()).toMatch(/\/tenants\/[0-9a-f]+$/);
   });
 
   test("other collections appear after creating root tenant", async () => {
-    await loadDashboard();
-    await admin.createTenant(rootTenant);
+    const admin = createAdminHelper();
+    await createRootTenant(admin);
     await expect(page.$("#nav-users")).resolves.not.toBeNull();
+  });
+
+  test("cannot duplicate root tenant", async () => {
+    await expect(duplicateRootTenant()).rejects.toThrowError(
+      "No element found for selector: #action-duplicate"
+    );
   });
 });

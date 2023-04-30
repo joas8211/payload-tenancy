@@ -85,6 +85,7 @@ export const tenancy =
               },
               admin: {
                 ...collection.admin,
+                disableDuplicate: true,
                 components: {
                   ...collection.admin?.components,
                   views: {

@@ -1,8 +1,7 @@
+import { Helper, wait } from "../../helpers/common";
+import { firstRootUser, rootTenant } from "./data";
+import { createLocalHelper } from "../../helpers/local";
 import { createAdminHelper } from "../../helpers/admin";
-import { wait } from "../../helpers/common";
-import { firstRootUser } from "./data";
-
-const admin = createAdminHelper();
 
 export const loadRegistrationPage = async () => {
   await page.goto(`${payloadUrl}/admin`);
@@ -19,10 +18,29 @@ export const registerRootUser = async () => {
   await page.waitForNetworkIdle();
 };
 
-export const loadDashboard = async () => {
+export const createRootTenant = async (helper: Helper) => {
   await payload.create({
     collection: "users",
     data: { email: firstRootUser.email, password: firstRootUser.password },
   });
+  await helper.login(firstRootUser);
+  await helper.createTenant(rootTenant);
+};
+
+export const duplicateRootTenant = async () => {
+  const local = createLocalHelper();
+  await createRootTenant(local);
+
+  const admin = createAdminHelper();
   await admin.login(firstRootUser);
+  const {
+    docs: [tenant],
+  } = await payload.find({
+    collection: "tenants",
+    where: { slug: { equals: rootTenant.slug } },
+  });
+  await page.goto(`${payloadUrl}/admin/collections/tenants/${tenant.id}`);
+  await page.waitForNetworkIdle();
+  await page.click("#action-duplicate");
+  await page.waitForNetworkIdle();
 };
