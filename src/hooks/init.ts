@@ -1,4 +1,4 @@
-import { Application } from "express";
+import { Application, Handler } from "express";
 import { Payload } from "payload";
 import { Config } from "payload/config";
 import { TenancyOptions } from "../options";
@@ -23,28 +23,47 @@ const prioritizeLastMiddleware = (express: Application) => {
   ];
 };
 
-export const createInitHook =
-  ({
-    options,
-    config,
-  }: {
-    options: TenancyOptions;
-    config: Config;
-  }): InitHook =>
-  async (payload: Payload) => {
+/**
+ * Check if middleware already exists in the application. Used to make sure that
+ * middleware is not inserted multiple times.
+ *
+ * @param express Express application
+ * @param middleware Middleware handler to check
+ * @returns True if middleware exists already in the application
+ */
+const middlewareExists = (express: Application, middleware: Handler): boolean =>
+  express._router.stack.some((layer) => layer.handle === middleware);
+
+export const createInitHook = ({
+  options,
+  config,
+}: {
+  options: TenancyOptions;
+  config: Config;
+}): InitHook => {
+  let middleware: Handler | undefined;
+
+  return async (payload: Payload) => {
     await config.onInit?.(payload);
 
     if (!payload.express) {
       return;
     }
 
-    if (options.isolationStrategy === "path") {
-      payload.express.use(createPathMapping({ options, config, payload }));
-      prioritizeLastMiddleware(payload.express);
+    if (!middleware) {
+      // Choose a middleware to use.
+      if (options.isolationStrategy === "path") {
+        middleware = createPathMapping({ options, config, payload });
+      }
+      if (options.isolationStrategy === "domain") {
+        middleware = createDomainMapping({ options, config, payload });
+      }
     }
 
-    if (options.isolationStrategy === "domain") {
-      payload.express.use(createDomainMapping({ options, config, payload }));
+    if (middleware && !middlewareExists(payload.express, middleware)) {
+      // Middleware chosen and does not exist already.
+      payload.express.use(middleware);
       prioritizeLastMiddleware(payload.express);
     }
   };
+};

@@ -1,8 +1,10 @@
 import { Helper, Post, Tenant, User, wait } from "./common";
 
-export const createAdminHelper = (): Helper => ({
+export const createAdminHelper = (
+  options: { baseUrl?: string } = {}
+): Helper => ({
   login: async (credentials: User) => {
-    await page.goto(`${payloadUrl}/admin`);
+    await page.goto(`${options.baseUrl || payloadUrl}/admin`);
     await page.waitForSelector("#field-email");
     await page.type("#field-email", credentials.email);
     await page.type("#field-password", credentials.password);
@@ -11,11 +13,13 @@ export const createAdminHelper = (): Helper => ({
     await page.waitForNetworkIdle();
   },
   logout: async () => {
-    await page.goto(`${payloadUrl}/admin/logout`);
+    await page.goto(`${options.baseUrl || payloadUrl}/admin/logout`);
     await page.waitForNetworkIdle();
   },
   createUser: async (user: User) => {
-    await page.goto(`${payloadUrl}/admin/collections/users/create`);
+    await page.goto(
+      `${options.baseUrl || payloadUrl}/admin/collections/users/create`
+    );
     await page.waitForNetworkIdle();
     await page.type("#field-email", user.email);
     await page.type("#field-password", user.password);
@@ -30,7 +34,9 @@ export const createAdminHelper = (): Helper => ({
     await page.waitForNetworkIdle();
   },
   createTenant: async (tenant: Tenant) => {
-    await page.goto(`${payloadUrl}/admin/collections/tenants/create`);
+    await page.goto(
+      `${options.baseUrl || payloadUrl}/admin/collections/tenants/create`
+    );
     await page.waitForNetworkIdle();
     await page.type("#field-slug", tenant.slug);
     for (let i = 0; i < tenant.domains.length; i++) {
@@ -52,7 +58,9 @@ export const createAdminHelper = (): Helper => ({
     await page.waitForNetworkIdle();
   },
   createPost: async (post: Post) => {
-    await page.goto(`${payloadUrl}/admin/collections/posts/create`);
+    await page.goto(
+      `${options.baseUrl || payloadUrl}/admin/collections/posts/create`
+    );
     await page.waitForNetworkIdle();
     await page.type("#field-title", post.title);
     await wait(500);
@@ -60,7 +68,7 @@ export const createAdminHelper = (): Helper => ({
     await page.waitForNetworkIdle();
   },
   deleteUser: async (user: User) => {
-    await page.goto(`${payloadUrl}/admin/collections/users`);
+    await page.goto(`${options.baseUrl || payloadUrl}/admin/collections/users`);
     await page.waitForNetworkIdle();
     await page.type(".search-filter__input", user.email);
     await page.waitForNetworkIdle();
@@ -72,7 +80,9 @@ export const createAdminHelper = (): Helper => ({
     await page.waitForNetworkIdle();
   },
   deleteTenant: async (tenant: Tenant) => {
-    await page.goto(`${payloadUrl}/admin/collections/tenants`);
+    await page.goto(
+      `${options.baseUrl || payloadUrl}/admin/collections/tenants`
+    );
     await page.waitForNetworkIdle();
     await page.type(".search-filter__input", tenant.slug);
     await page.waitForNetworkIdle();
@@ -84,7 +94,7 @@ export const createAdminHelper = (): Helper => ({
     await page.waitForNetworkIdle();
   },
   deletePost: async (post: Post) => {
-    await page.goto(`${payloadUrl}/admin/collections/posts`);
+    await page.goto(`${options.baseUrl || payloadUrl}/admin/collections/posts`);
     await page.waitForNetworkIdle();
     await page.type(".search-filter__input", post.title);
     await page.waitForNetworkIdle();
