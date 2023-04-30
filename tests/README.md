@@ -40,12 +40,12 @@ You can open browser to some test scenario by passing path to folder containing
 payload.config.ts to `yarn dev` command.
 
 ```shell
-$ yarn dev tests/1-setup
+$ yarn dev tests/scenarios/initial-setup
 ```
 
 You can also automate the browser to specific state of the robot by passing the
 wanted state as the second argument.
 
 ```shell
-$ yarn dev tests/1-setup dashboardLoaded
+$ yarn dev tests/scenarios/initial-setup createRootTenant
 ```
