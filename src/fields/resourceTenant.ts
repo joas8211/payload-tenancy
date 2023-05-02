@@ -13,9 +13,7 @@ export const createResourceTenantField = ({
   type: "relationship",
   name: "tenant",
   relationTo: tenantCollection,
-  access: {
-    read: () => false,
-  },
+  hidden: true,
   hooks: {
     beforeChange: [
       ({ req }) => {
