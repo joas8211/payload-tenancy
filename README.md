@@ -1,7 +1,5 @@
 # Multi-tenancy plugin for Payload CMS
 
-**Initial version for this plugin is still work in progress!**
-
 This plugin allows multiple tenants to access different resources in the same
 instance of Payload CMS.
 
