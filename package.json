@@ -1,6 +1,6 @@
 {
   "name": "payload-tenancy",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Multi-tenancy plugin for Payload CMS",
   "repository": "github.com/joas8211/payload-tenancy",
   "author": "Jesse Sivonen",
