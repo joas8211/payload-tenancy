@@ -105,36 +105,54 @@ export default buildConfig({
 
 ## Installation
 
-1. Ensure you have at least one authentication-enabled collection.
-2. Create tenant collection. Use slug "tenants" or configure other slug in the
+1. Install plugin from
+   [NPM registry](https://www.npmjs.com/package/payload-tenancy) to your Payload
+   project by using you preferred NodeJS package manager. Some example commands
+   below.
+
+   Using npm:
+
+   ```shell
+   $ npm install payload-tenancy
+   ```
+
+   Using Yarn:
+
+   ```shell
+   $ yarn add payload-tenancy
+   ```
+
+2. Ensure you have at least one authentication-enabled (user) collection.
+
+3. Create tenant collection. Use slug "tenants" or configure other slug in the
    following step.
 
-```javascript
-export const Tenants: CollectionConfig = {
-  slug: "tenants",
-  admin: {
-    useAsTitle: "name",
-  },
-  fields: [
-    {
-      type: "text",
-      name: "name",
-      label: "Name",
-      required: true,
-    },
-  ],
-};
-```
+   ```javascript
+   export const Tenants: CollectionConfig = {
+     slug: "tenants",
+     admin: {
+       useAsTitle: "name",
+     },
+     fields: [
+       {
+         type: "text",
+         name: "name",
+         label: "Name",
+         required: true,
+       },
+     ],
+   };
+   ```
 
-3. Import and add the plugin to your Payload config.
+4. Import and add the plugin to your Payload config.
 
-```javascript
-export default buildConfig({
-  plugins: [tenancy()],
-  collections: [Users, Tenants],
-  // ...rest of the config...
-});
-```
+   ```javascript
+   export default buildConfig({
+     plugins: [tenancy()],
+     collections: [Users, Tenants],
+     // ...rest of the config...
+   });
+   ```
 
 ## Initial setup
 
