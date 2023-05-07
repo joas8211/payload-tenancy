@@ -35,8 +35,8 @@ export const createPathMapping =
 
     // There must be a path with at least one segment and that segment is tenant
     // slug.
-    const tenantSlug = req.url.slice(1).split("/")[0];
-    if (!tenantSlug) {
+    const encodedTenantSlug = req.url.slice(1).split("/")[0];
+    if (!encodedTenantSlug) {
       res.status(404).send();
       return;
     }
@@ -45,7 +45,7 @@ export const createPathMapping =
     req.tenant = (
       await payload.find({
         collection: options.tenantCollection,
-        where: { slug: { equals: tenantSlug } },
+        where: { slug: { equals: decodeURIComponent(encodedTenantSlug) } },
       })
     ).docs[0];
     if (!req.tenant) {
@@ -55,6 +55,6 @@ export const createPathMapping =
 
     // Remove tenant slug from the request URL so it can be processed normally
     // by payload.
-    req.url = req.url.slice(`/${tenantSlug}`.length);
+    req.url = req.url.slice(`/${encodedTenantSlug}`.length);
     next();
   };
