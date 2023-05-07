@@ -5,6 +5,7 @@ import {
   firstRootUser,
   secondLevelTenant,
   firstSecondLevelUser,
+  secondLevelTenantWithSpecialCharacters,
 } from "./data";
 
 export default buildConfig({
@@ -36,6 +37,16 @@ export default buildConfig({
       data: {
         slug: secondLevelTenant.slug,
         domains: secondLevelTenant.domains.map((domain) => ({ domain })),
+        parent: rootTenantDoc.id,
+      },
+    });
+    await payload.create({
+      collection: "tenants",
+      data: {
+        slug: secondLevelTenantWithSpecialCharacters.slug,
+        domains: secondLevelTenantWithSpecialCharacters.domains.map(
+          (domain) => ({ domain })
+        ),
         parent: rootTenantDoc.id,
       },
     });

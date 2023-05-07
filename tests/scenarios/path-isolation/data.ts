@@ -22,3 +22,9 @@ export const firstSecondLevelUser: User = {
   password: "test",
   tenant: secondLevelTenant.slug,
 };
+
+export const secondLevelTenantWithSpecialCharacters: Tenant = {
+  slug: "second / 100% special",
+  domains: ["second-special.root.local"],
+  parent: rootTenant.slug,
+};
