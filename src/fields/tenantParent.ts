@@ -1,7 +1,14 @@
 import { Config } from "payload/config";
-import { Document, Field, FieldAccess, Validate } from "payload/types";
+import {
+  CollectionConfig,
+  Document,
+  Field,
+  FieldAccess,
+  Validate,
+} from "payload/types";
 import { TenancyOptions } from "../options";
 import { getAuthorizedTenants } from "../utils/getAuthorizedTenants";
+import { mergeObjects } from "../utils/mergeObjects";
 
 /**
  * Limits parent field access to users that are on tenant above the accessed
@@ -101,18 +108,24 @@ const createValidate =
 /** @returns Parent field for tenants. */
 export const createTenantParentField = ({
   options,
+  collection,
 }: {
   options: TenancyOptions;
   config: Config;
-}): Field => ({
-  type: "relationship",
-  name: "parent",
-  relationTo: options.tenantCollection,
-  required: true,
-  filterOptions: ({ id }) => ({ id: { not_equals: id } }),
-  validate: createValidate(options),
-  access: {
-    read: createAccess(options),
-    update: createAccess(options),
-  },
-});
+  collection: CollectionConfig;
+}): Field =>
+  mergeObjects<Field>(
+    {
+      type: "relationship",
+      name: "parent",
+      relationTo: options.tenantCollection,
+      required: true,
+      filterOptions: ({ id }) => ({ id: { not_equals: id } }),
+      validate: createValidate(options),
+      access: {
+        read: createAccess(options),
+        update: createAccess(options),
+      },
+    },
+    collection.fields.find((field) => "name" in field && field.name == "parent")
+  );

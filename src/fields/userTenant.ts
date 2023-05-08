@@ -1,7 +1,8 @@
 import { Config } from "payload/config";
-import { Document, Field, Validate } from "payload/types";
+import { CollectionConfig, Document, Field, Validate } from "payload/types";
 import { TenancyOptions } from "../options";
 import { getAuthorizedTenants } from "../utils/getAuthorizedTenants";
+import { mergeObjects } from "../utils/mergeObjects";
 
 const createValidate =
   (options: TenancyOptions): Validate =>
@@ -32,17 +33,25 @@ const createValidate =
 /** @returns Tenant field for users. */
 export const createUserTenantField = ({
   options,
+  collection,
 }: {
   options: TenancyOptions;
   config: Config;
-}): Field => ({
-  type: "relationship",
-  name: "tenant",
-  relationTo: options.tenantCollection,
-  required: true,
-  validate: createValidate(options),
-  admin: {
-    condition: () =>
-      !globalThis.location?.pathname.endsWith("/create-first-user"),
-  },
-});
+  collection: CollectionConfig;
+}): Field =>
+  mergeObjects<Field>(
+    {
+      type: "relationship",
+      name: "tenant",
+      relationTo: options.tenantCollection,
+      required: true,
+      validate: createValidate(options),
+      admin: {
+        condition: () =>
+          !globalThis.location?.pathname.endsWith("/create-first-user"),
+      },
+    },
+    collection.fields.find(
+      (field) => "name" in field && field.name === "tenant"
+    )
+  );

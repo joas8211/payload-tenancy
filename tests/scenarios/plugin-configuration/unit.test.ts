@@ -42,4 +42,40 @@ describe("plugin configuration", () => {
       ).not.toThrow();
     });
   });
+
+  test("tenant domains field can be hidden", async () => {
+    const domainsField = (
+      await tenancy()({
+        collections: [
+          {
+            slug: "users",
+            auth: true,
+            fields: [],
+          },
+          {
+            slug: "tenants",
+            fields: [
+              {
+                type: "array",
+                name: "domains",
+                fields: [],
+                hidden: true,
+              },
+            ],
+          },
+        ],
+      })
+    ).collections
+      .find((collection) => collection.slug === "tenants")
+      .fields.find((field) => "name" in field && field.name === "domains");
+    expect(domainsField).toEqual(
+      expect.objectContaining({ type: "array", name: "domains", hidden: true })
+    );
+    expect(domainsField).not.toEqual({
+      type: "array",
+      name: "domains",
+      fields: [],
+      hidden: true,
+    });
+  });
 });

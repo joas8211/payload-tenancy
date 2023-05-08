@@ -22,6 +22,7 @@ import {
 import { createInitHook } from "./hooks/init";
 import { createRestrictLogin } from "./hooks/auth";
 import { EditViewWithRefresh } from "./views/EditViewWithRefresh";
+import { overrideFields } from "./utils/overrideFields";
 
 export const tenancy =
   (partialOptions: Partial<TenancyOptions> = {}): Plugin =>
@@ -57,15 +58,15 @@ export const tenancy =
                   original: collection.access?.delete,
                 }),
               },
-              fields: [
-                ...collection.fields,
-                createTenantSlugField({ options, config }),
-                createTenantParentField({
-                  options,
-                  config,
-                }),
-                createTenantDomainsField({ options, config }),
-              ],
+              fields: overrideFields(
+                collection.fields,
+                [
+                  createTenantSlugField({ options, config, collection }),
+                  createTenantParentField({ options, config, collection }),
+                  createTenantDomainsField({ options, config, collection }),
+                ],
+                []
+              ),
               hooks: {
                 ...collection.hooks,
                 afterChange: [
@@ -127,21 +128,16 @@ export const tenancy =
                   original: collection.access?.admin,
                 }),
               },
-              fields: [
-                ...collection.fields,
-                createUserTenantField({
-                  options,
-                  config,
-                }),
-              ],
+              fields: overrideFields(
+                collection.fields,
+                [],
+                [createUserTenantField({ options, config, collection })]
+              ),
               hooks: {
                 ...collection.hooks,
                 beforeLogin: [
                   ...(collection.hooks?.beforeLogin || []),
-                  createRestrictLogin({
-                    options,
-                    config,
-                  }),
+                  createRestrictLogin({ options, config }),
                 ],
               },
             }
@@ -171,13 +167,17 @@ export const tenancy =
                   original: collection.access?.delete,
                 }),
               },
-              fields: [
-                ...collection.fields,
-                createResourceTenantField({
-                  options,
-                  config,
-                }),
-              ],
+              fields: overrideFields(
+                collection.fields,
+                [],
+                [
+                  createResourceTenantField({
+                    options,
+                    config,
+                    collection,
+                  }),
+                ]
+              ),
             }
       ),
       routes: {

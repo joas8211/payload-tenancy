@@ -1,14 +1,22 @@
 import { Config } from "payload/config";
-import { Field } from "payload/types";
+import { CollectionConfig, Field } from "payload/types";
 import { TenancyOptions } from "../options";
+import { mergeObjects } from "../utils/mergeObjects";
 
 /** @returns Slug field for tenants. */
-export const createTenantSlugField: (arg: {
+export const createTenantSlugField = ({
+  collection,
+}: {
   options: TenancyOptions;
   config: Config;
-}) => Field = () => ({
-  type: "text",
-  name: "slug",
-  unique: true,
-  required: true,
-});
+  collection: CollectionConfig;
+}): Field =>
+  mergeObjects<Field>(
+    {
+      type: "text",
+      name: "slug",
+      unique: true,
+      required: true,
+    },
+    collection.fields.find((field) => "name" in field && field.name === "slug")
+  );
