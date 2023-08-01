@@ -1,6 +1,6 @@
 {
   "name": "payload-tenancy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Multi-tenancy plugin for Payload CMS",
   "repository": {
     "type": "git",
