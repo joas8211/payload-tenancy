@@ -3,8 +3,6 @@ import { CollectionConfig, Field } from "payload/types";
 import { TenancyOptions } from "../options";
 import { mergeObjects } from "../utils/mergeObjects";
 
-const hostnamePattern = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i;
-
 export const createTenantDomainsField = ({
   collection,
 }: {
@@ -20,8 +18,7 @@ export const createTenantDomainsField = ({
         {
           type: "text",
           name: "domain",
-          validate: (value) =>
-            hostnamePattern.test(value) || "Domain is not valid.",
+          required: true,
         },
       ],
       admin: {
