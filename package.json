@@ -4,7 +4,7 @@
   "description": "Multi-tenancy plugin for Payload CMS",
   "repository": {
     "type": "git",
-    "url:": "https://github.com/joas8211/payload-tenancy.git"
+    "url": "https://github.com/joas8211/payload-tenancy.git"
   },
   "author": "Jesse Sivonen",
   "license": "MIT",
