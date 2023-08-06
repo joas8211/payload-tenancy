@@ -15,11 +15,21 @@ export interface TenancyOptions {
    *   from config to allow multiple domains.
    */
   isolationStrategy: "user" | "path" | "domain";
+
+  /**
+   * Slugs of collections you want to share between all tenants. Specifying
+   * collection here will opt it out from tenant isolation.
+   */
+  sharedCollections: string[];
 }
 
 /** @returns Validated options with default values filled in. */
 export const validateOptions = ({
-  options: { tenantCollection = "tenants", isolationStrategy = "user" },
+  options: {
+    tenantCollection = "tenants",
+    isolationStrategy = "user",
+    sharedCollections = [],
+  },
   config,
 }: {
   options: Partial<TenancyOptions>;
@@ -44,8 +54,27 @@ export const validateOptions = ({
     );
   }
 
+  for (const slug of sharedCollections) {
+    if (slug === tenantCollection) {
+      throw new Error(
+        "It's not allowed to share tenant collection between all tenants."
+      );
+    }
+
+    if (
+      config.collections?.some(
+        (collection) => collection.slug === slug && collection.auth
+      )
+    ) {
+      throw new Error(
+        "It's not allowed to share auth collection between all tenants."
+      );
+    }
+  }
+
   return {
     tenantCollection,
     isolationStrategy,
+    sharedCollections,
   };
 };

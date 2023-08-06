@@ -12,6 +12,11 @@ const tenants = (slug: string): CollectionConfig => ({
   fields: [],
 });
 
+const resources = (slug: string): CollectionConfig => ({
+  slug,
+  fields: [],
+});
+
 describe("plugin configuration", () => {
   test("validates auth collection exists", () => {
     expect(() => tenancy()({ collections: [tenants("tenants")] })).toThrow();
@@ -40,6 +45,68 @@ describe("plugin configuration", () => {
           collections: [auth("users"), tenants("tenants")],
         })
       ).not.toThrow();
+    });
+  });
+
+  describe("sharedCollections", () => {
+    it("does not allow you to opt-out tenant collection", () => {
+      expect(() =>
+        tenancy({ sharedCollections: ["tenants"] })({
+          collections: [auth("users"), tenants("tenants")],
+        })
+      ).toThrow();
+      expect(() =>
+        tenancy({
+          tenantCollection: "TENANTS",
+          sharedCollections: ["TENANTS"],
+        })({
+          collections: [auth("users"), tenants("TENANTS")],
+        })
+      ).toThrow();
+    });
+
+    it("does not allow you to opt-out auth collection", () => {
+      expect(() =>
+        tenancy({ sharedCollections: ["users"] })({
+          collections: [auth("users"), tenants("tenants")],
+        })
+      ).toThrow();
+      expect(() =>
+        tenancy({ sharedCollections: ["otherUsers"] })({
+          collections: [auth("otherUsers"), tenants("tenants")],
+        })
+      ).toThrow();
+    });
+
+    it("allows you to opt-out resource collection", () => {
+      expect(
+        tenancy({ sharedCollections: ["pages"] })({
+          collections: [auth("users"), tenants("tenants"), resources("pages")],
+        })
+      ).toEqual(
+        expect.objectContaining({
+          collections: expect.arrayContaining([resources("pages")]),
+        })
+      );
+    });
+
+    it("defaults to nothing", () => {
+      expect(
+        tenancy()({
+          collections: [auth("users"), tenants("tenants"), resources("pages")],
+        })
+      ).toEqual(
+        expect.objectContaining({
+          collections: expect.arrayContaining([
+            expect.objectContaining({
+              ...resources("pages"),
+              fields: expect.arrayContaining([
+                expect.objectContaining({ name: "tenant" }),
+              ]),
+            }),
+          ]),
+        })
+      );
     });
   });
 

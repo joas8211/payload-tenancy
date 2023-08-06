@@ -141,6 +141,9 @@ export const tenancy =
                 ],
               },
             }
+          : options.sharedCollections.includes(collection.slug)
+          ? // Do not modify the collection (opt-out)
+            collection
           : // Modify resource collections
             {
               ...collection,
