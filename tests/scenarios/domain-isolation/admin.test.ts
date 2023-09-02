@@ -93,4 +93,36 @@ describe("domain isolation", () => {
     await admin.login(firstSecondLevelUser);
     await expect(page.$(".dashboard")).resolves.toBeNull();
   });
+
+  test("root user can download root tenant file", async () => {
+    const {
+      docs: [rootTenantDoc],
+    } = await payload.find({
+      collection: "tenants",
+      where: { slug: { equals: rootTenant.slug } },
+    });
+    const buffer = Buffer.from("content");
+    const file = await payload.create({
+      collection: "media",
+      data: {
+        tenant: rootTenantDoc.id,
+      },
+      file: {
+        data: buffer,
+        mimetype: "text/plain",
+        name: "file.txt",
+        size: buffer.byteLength,
+      },
+    });
+
+    const admin = createAdminHelper({
+      baseUrl: `http://${rootTenant.domains[0]}`,
+    });
+    await admin.login(firstRootUser);
+    const response = await page.goto(
+      `http://${rootTenant.domains[0]}${file.url}`
+    );
+    const body = await response.text();
+    expect(body).toBe("content");
+  });
 });

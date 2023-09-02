@@ -1,7 +1,6 @@
 import { Config } from "payload/config";
 import { CollectionAfterReadHook, CollectionConfig } from "payload/types";
 import { TenancyOptions } from "../options";
-import { RequestWithTenant } from "../utils/requestWithTenant";
 
 /**
  * Fix file URLs when using path tenant isolation strategy.
@@ -19,15 +18,28 @@ export const createUploadAfterReadHook =
     collection: CollectionConfig;
   }): CollectionAfterReadHook =>
   async ({ doc, req }): Promise<void> => {
+    if (req.context.skipTenancyUploadAfterReadHook) {
+      return doc;
+    }
+
     const parameters =
       typeof collection.upload === "object" ? collection.upload : {};
     let basePath = parameters.staticURL ?? "/media";
     if (isolationStrategy === "path") {
-      const { tenant, user, payload } = req as RequestWithTenant;
-      const tenantId = tenant?.id || user?.tenant?.id;
+      const { payload } = req;
+      req.context.skipTenancyUploadAfterReadHook = true;
+      const { tenant } = await payload.findByID({
+        collection: collection.slug,
+        id: doc.id,
+        depth: 0,
+        showHiddenFields: true,
+        req,
+      });
+      delete req.context.skipTenancyUploadAfterReadHook;
       const { slug } = await payload.findByID({
         collection: tenantCollection,
-        id: tenantId,
+        id: tenant,
+        depth: 0,
       });
       basePath = `/${slug}${basePath}`;
     }

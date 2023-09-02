@@ -20,6 +20,11 @@ export default buildConfig({
       slug: "tenants",
       fields: [],
     },
+    {
+      slug: "media",
+      upload: { staticDir: "../../../uploads" },
+      fields: [],
+    },
   ],
   admin: {
     user: "users",
@@ -40,16 +45,16 @@ export default buildConfig({
         parent: rootTenantDoc.id,
       },
     });
-    await payload.create({
-      collection: "tenants",
-      data: {
-        slug: secondLevelTenantWithSpecialCharacters.slug,
-        domains: secondLevelTenantWithSpecialCharacters.domains.map(
-          (domain) => ({ domain })
-        ),
-        parent: rootTenantDoc.id,
-      },
-    });
+    // await payload.create({
+    //   collection: "tenants",
+    //   data: {
+    //     slug: secondLevelTenantWithSpecialCharacters.slug,
+    //     domains: secondLevelTenantWithSpecialCharacters.domains.map(
+    //       (domain) => ({ domain })
+    //     ),
+    //     parent: rootTenantDoc.id,
+    //   },
+    // });
     await payload.create({
       collection: "users",
       data: {

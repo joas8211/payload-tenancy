@@ -1,23 +1,24 @@
 import { buildConfig } from "payload/config";
 import { tenancy } from "../../../src/plugin";
-import {
-  rootTenant,
-  firstRootUser,
-  secondLevelTenant,
-  firstSecondLevelUser,
-} from "./data";
+import { firstRootUser, rootTenant } from "./data";
 
 export default buildConfig({
-  plugins: [tenancy({ isolationStrategy: "domain" })],
+  plugins: [tenancy({ isolationStrategy: "user" })],
   collections: [
     {
       slug: "users",
       auth: true,
       fields: [],
+      admin: {
+        useAsTitle: "email",
+      },
     },
     {
       slug: "tenants",
       fields: [],
+      admin: {
+        useAsTitle: "slug",
+      },
     },
     {
       slug: "media",
@@ -36,28 +37,12 @@ export default buildConfig({
         domains: rootTenant.domains.map((domain) => ({ domain })),
       },
     });
-    const secondLevelTenantDoc = await payload.create({
-      collection: "tenants",
-      data: {
-        slug: secondLevelTenant.slug,
-        domains: secondLevelTenant.domains.map((domain) => ({ domain })),
-        parent: rootTenantDoc.id,
-      },
-    });
     await payload.create({
       collection: "users",
       data: {
         email: firstRootUser.email,
         password: firstRootUser.password,
         tenant: rootTenantDoc.id,
-      },
-    });
-    await payload.create({
-      collection: "users",
-      data: {
-        email: firstSecondLevelUser.email,
-        password: firstSecondLevelUser.password,
-        tenant: secondLevelTenantDoc.id,
       },
     });
   },
