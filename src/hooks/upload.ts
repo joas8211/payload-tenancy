@@ -11,6 +11,7 @@ import { TenancyOptions } from "../options";
 export const createUploadAfterReadHook =
   ({
     options: { isolationStrategy, tenantCollection },
+    config: { serverURL },
     collection,
   }: {
     options: TenancyOptions;
@@ -43,5 +44,6 @@ export const createUploadAfterReadHook =
       });
       basePath = `/${slug}${basePath}`;
     }
-    return { ...doc, url: `${basePath}/${doc.filename}` };
+
+    return { ...doc, url: `${serverURL ?? ""}${basePath}/${doc.filename}` };
   };

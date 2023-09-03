@@ -120,7 +120,9 @@ describe("domain isolation", () => {
     });
     await admin.login(firstRootUser);
     const response = await page.goto(
-      `http://${rootTenant.domains[0]}${file.url}`
+      file.url.startsWith("/")
+        ? `http://${rootTenant.domains[0]}${file.url}`
+        : file.url
     );
     const body = await response.text();
     expect(body).toBe("content");

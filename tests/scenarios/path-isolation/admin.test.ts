@@ -81,7 +81,9 @@ describe("path isolation", () => {
       baseUrl: `${payloadUrl}/${encodeURIComponent(rootTenant.slug)}`,
     });
     await admin.login(firstRootUser);
-    const response = await page.goto(payloadUrl + file.url);
+    const response = await page.goto(
+      file.url.startsWith("/") ? payloadUrl + file.url : file.url
+    );
     const body = await response.text();
     expect(body).toBe("content");
   });
