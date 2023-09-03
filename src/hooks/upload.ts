@@ -25,6 +25,11 @@ export const createUploadAfterReadHook =
 
     const parameters =
       typeof collection.upload === "object" ? collection.upload : {};
+    if (parameters.staticURL?.startsWith("/") === false) {
+      // Absolute URL, don't touch it.
+      return doc;
+    }
+
     let basePath = parameters.staticURL ?? "/media";
     if (isolationStrategy === "path") {
       const { payload } = req;
