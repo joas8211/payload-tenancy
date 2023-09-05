@@ -1,6 +1,7 @@
 import { Config } from "payload/config";
 import { CollectionAfterReadHook, CollectionConfig } from "payload/types";
 import { TenancyOptions } from "../options";
+import { FileSize } from "payload/dist/uploads/types";
 
 /**
  * Fix file URLs when using path tenant isolation strategy.
@@ -50,5 +51,19 @@ export const createUploadAfterReadHook =
       basePath = `/${slug}${basePath}`;
     }
 
-    return { ...doc, url: `${serverURL ?? ""}${basePath}/${doc.filename}` };
+    return {
+      ...doc,
+      url: `${serverURL ?? ""}${basePath}/${doc.filename}`,
+      sizes: {
+        ...Object.fromEntries(
+          Object.entries<FileSize>(doc.sizes).map(([name, size]) => [
+            name,
+            {
+              ...size,
+              url: `${serverURL ?? ""}${basePath}/${size.filename}`,
+            },
+          ])
+        ),
+      },
+    };
   };
