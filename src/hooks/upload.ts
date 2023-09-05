@@ -19,7 +19,7 @@ export const createUploadAfterReadHook =
     collection: CollectionConfig;
   }): CollectionAfterReadHook =>
   async ({ doc, req }): Promise<void> => {
-    if (req.context.skipTenancyUploadAfterReadHook) {
+    if (req.context?.skipTenancyUploadAfterReadHook) {
       return doc;
     }
 
