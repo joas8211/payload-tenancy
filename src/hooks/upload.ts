@@ -56,7 +56,7 @@ export const createUploadAfterReadHook =
       url: `${serverURL ?? ""}${basePath}/${doc.filename}`,
       sizes: {
         ...Object.fromEntries(
-          Object.entries<FileSize>(doc.sizes).map(([name, size]) => [
+          Object.entries<FileSize>(doc.sizes ?? {}).map(([name, size]) => [
             name,
             {
               ...size,
