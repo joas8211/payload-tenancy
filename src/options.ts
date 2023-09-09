@@ -21,6 +21,12 @@ export interface TenancyOptions {
    * collection here will opt it out from tenant isolation.
    */
   sharedCollections: string[];
+
+  /**
+   * Slugs of globals you want to share between all tenants. Specifying global
+   * here will opt it out from tenant isolation.
+   */
+  sharedGlobals: string[];
 }
 
 /** @returns Validated options with default values filled in. */
@@ -29,6 +35,7 @@ export const validateOptions = ({
     tenantCollection = "tenants",
     isolationStrategy = "user",
     sharedCollections = [],
+    sharedGlobals = [],
   },
   config,
 }: {
@@ -76,5 +83,6 @@ export const validateOptions = ({
     tenantCollection,
     isolationStrategy,
     sharedCollections,
+    sharedGlobals,
   };
 };

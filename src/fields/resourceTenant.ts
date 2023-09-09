@@ -11,7 +11,7 @@ export const createResourceTenantField = ({
 }: {
   options: TenancyOptions;
   config: Config;
-  collection: CollectionConfig;
+  collection?: CollectionConfig;
 }): Field =>
   mergeObjects<Field>(
     {
@@ -29,7 +29,7 @@ export const createResourceTenantField = ({
         ],
       },
     },
-    collection.fields.find(
+    collection?.fields.find(
       (field) => "name" in field && field.name === "tenant"
     )
   );

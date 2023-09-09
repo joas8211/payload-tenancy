@@ -14,6 +14,10 @@ export const mergeObjects = <Obj extends object>(
   ...sources: Obj[]
 ): Obj => {
   for (const source of sources) {
+    if (!source) {
+      continue;
+    }
+
     for (const key in source) {
       const sourceValue = source[key];
       const destinationValue = destination[key];

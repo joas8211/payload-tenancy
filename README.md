@@ -12,6 +12,7 @@ hierarchical, so tenants can also include other tenants.
 
 - [Features](#features)
 - [Collections and fields](#collections-and-fields)
+- [Globals](#globals)
 - [Tenant isolation strategies](#tenant-isolation-strategies)
 - [Installation](#installation)
 - [Initial setup](#initial-setup)
@@ -71,6 +72,34 @@ Here's description of collections used and fields that are added by this plugin.
   or an user belonging to the tenant when using "user" isolation strategy. Users
   above in tenant hierarchy can login to tenants below and access resource
   collections that way.
+
+# Globals
+
+Globals are isolated between tenants after version 1.2 by default. The isolation
+is achieved by creating collection for each global and proxying the global to
+the correct document of that collection. Global collections are named by global
+they hold (`globalSlug + "Globals"`, eg. "settingsGlobals") and can only be
+accessed through the global, or using Local API with overridden access.
+
+To operate on isolated globals using Local API, you must pass user object with a
+tenant so that the correct document is accessed.
+
+```javascript
+const globalDocument = await payload.findGlobal({
+  slug: "settings",
+  user: { tenant: someTenantOrId },
+});
+```
+
+To opt-out global from tenant isolation you can add the slugs of the globals to
+`sharedGlobals` option.
+
+```javascript
+export default buildConfig({
+  plugins: [tenancy({ sharedGlobals: ["settings"] })],
+  // ...rest of the config...
+});
+```
 
 ## Tenant isolation strategies
 
