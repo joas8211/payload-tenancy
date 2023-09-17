@@ -95,6 +95,7 @@ export const tenancy =
           .map(
             (global): CollectionConfig => ({
               slug: global.slug + "Globals",
+              versions: global.versions,
               fields: overrideFields(
                 global.fields.map(transformGlobalCollectionField),
                 [],
