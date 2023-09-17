@@ -49,6 +49,17 @@ export const tenancy =
           ? global
           : {
               ...global,
+              fields: overrideFields(
+                global.fields,
+                [],
+                [
+                  createResourceTenantField({
+                    options,
+                    config,
+                    global,
+                  }),
+                ]
+              ),
               hooks: {
                 beforeRead: [
                   createGlobalBeforeReadHook({

@@ -1,5 +1,5 @@
 import { Config } from "payload/config";
-import { CollectionConfig, Field } from "payload/types";
+import { CollectionConfig, Field, GlobalConfig } from "payload/types";
 import { TenancyOptions } from "../options";
 import { RequestWithTenant } from "../utils/requestWithTenant";
 import { mergeObjects } from "../utils/mergeObjects";
@@ -8,10 +8,12 @@ import { mergeObjects } from "../utils/mergeObjects";
 export const createResourceTenantField = ({
   options: { tenantCollection },
   collection,
+  global,
 }: {
   options: TenancyOptions;
   config: Config;
   collection?: CollectionConfig;
+  global?: GlobalConfig;
 }): Field =>
   mergeObjects<Field>(
     {
@@ -29,7 +31,7 @@ export const createResourceTenantField = ({
         ],
       },
     },
-    collection?.fields.find(
+    (collection ?? global)?.fields.find(
       (field) => "name" in field && field.name === "tenant"
     )
   );
