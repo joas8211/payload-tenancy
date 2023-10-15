@@ -47,7 +47,7 @@ describe("domain isolation", () => {
                 .then(() => resolve())
                 .catch((err) => reject(err));
             });
-          }
+          },
         );
         proxyRequest.on("error", (err) => {
           request.abort();
@@ -122,7 +122,7 @@ describe("domain isolation", () => {
     const response = await page.goto(
       file.url.startsWith("/")
         ? `http://${rootTenant.domains[0]}${file.url}`
-        : file.url
+        : file.url,
     );
     const body = await response.text();
     expect(body).toBe("content");

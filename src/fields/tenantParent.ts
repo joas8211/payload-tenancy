@@ -127,5 +127,7 @@ export const createTenantParentField = ({
         update: createAccess(options),
       },
     },
-    collection.fields.find((field) => "name" in field && field.name == "parent")
+    collection.fields.find(
+      (field) => "name" in field && field.name == "parent",
+    ),
   );

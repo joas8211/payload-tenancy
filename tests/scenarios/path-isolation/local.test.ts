@@ -39,7 +39,7 @@ describe("path isolation", () => {
         filename: "file1.txt",
         content: "content1",
         tenantId: rootTenantDoc.id,
-      })
+      }),
     ).resolves.not.toBeFalsy();
 
     await expect(
@@ -47,11 +47,14 @@ describe("path isolation", () => {
         filename: "file2.txt",
         content: "content2",
         tenantId: rootTenantDoc.id,
-      })
+      }),
     ).resolves.not.toBeFalsy();
 
     await expect(
-      payload.find({ collection: "media", where: { tenant: rootTenantDoc.id } })
+      payload.find({
+        collection: "media",
+        where: { tenant: rootTenantDoc.id },
+      }),
     ).resolves.toEqual(
       expect.objectContaining({
         docs: expect.arrayContaining([
@@ -64,7 +67,7 @@ describe("path isolation", () => {
             url: expect.stringMatching(/^\/root\/media\/file2/),
           }),
         ]),
-      })
+      }),
     );
   });
 });

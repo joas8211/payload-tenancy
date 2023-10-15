@@ -25,5 +25,5 @@ export const createTenantSlugField = ({
         return true;
       },
     },
-    collection.fields.find((field) => "name" in field && field.name === "slug")
+    collection.fields.find((field) => "name" in field && field.name === "slug"),
   );

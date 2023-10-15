@@ -28,6 +28,6 @@ export const createTenantDomainsField = ({
       },
     },
     collection.fields.find(
-      (field) => "name" in field && field.name == "domains"
-    )
+      (field) => "name" in field && field.name == "domains",
+    ),
   );

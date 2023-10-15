@@ -30,8 +30,8 @@ export const getAuthorizedTenants = async ({
             options,
             payload,
             tenantId: tenant.id,
-          })
-        )
+          }),
+        ),
       )
     ).flat(),
   ];

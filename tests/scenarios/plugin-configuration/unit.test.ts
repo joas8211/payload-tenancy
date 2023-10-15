@@ -21,7 +21,7 @@ describe("plugin configuration", () => {
   test("validates auth collection exists", () => {
     expect(() => tenancy()({ collections: [tenants("tenants")] })).toThrow();
     expect(() =>
-      tenancy()({ collections: [auth("AUTH"), tenants("tenants")] })
+      tenancy()({ collections: [auth("AUTH"), tenants("tenants")] }),
     ).not.toThrow();
   });
 
@@ -30,12 +30,12 @@ describe("plugin configuration", () => {
       expect(() =>
         tenancy({ tenantCollection: "TENANTS" })({
           collections: [auth("users")],
-        })
+        }),
       ).toThrow();
       expect(() =>
         tenancy({ tenantCollection: "TENANTS" })({
           collections: [auth("users"), tenants("TENANTS")],
-        })
+        }),
       ).not.toThrow();
     });
 
@@ -43,7 +43,7 @@ describe("plugin configuration", () => {
       expect(() =>
         tenancy()({
           collections: [auth("users"), tenants("tenants")],
-        })
+        }),
       ).not.toThrow();
     });
   });
@@ -53,7 +53,7 @@ describe("plugin configuration", () => {
       expect(() =>
         tenancy({ sharedCollections: ["tenants"] })({
           collections: [auth("users"), tenants("tenants")],
-        })
+        }),
       ).toThrow();
       expect(() =>
         tenancy({
@@ -61,7 +61,7 @@ describe("plugin configuration", () => {
           sharedCollections: ["TENANTS"],
         })({
           collections: [auth("users"), tenants("TENANTS")],
-        })
+        }),
       ).toThrow();
     });
 
@@ -69,12 +69,12 @@ describe("plugin configuration", () => {
       expect(() =>
         tenancy({ sharedCollections: ["users"] })({
           collections: [auth("users"), tenants("tenants")],
-        })
+        }),
       ).toThrow();
       expect(() =>
         tenancy({ sharedCollections: ["otherUsers"] })({
           collections: [auth("otherUsers"), tenants("tenants")],
-        })
+        }),
       ).toThrow();
     });
 
@@ -82,11 +82,11 @@ describe("plugin configuration", () => {
       expect(
         tenancy({ sharedCollections: ["pages"] })({
           collections: [auth("users"), tenants("tenants"), resources("pages")],
-        })
+        }),
       ).toEqual(
         expect.objectContaining({
           collections: expect.arrayContaining([resources("pages")]),
-        })
+        }),
       );
     });
 
@@ -94,7 +94,7 @@ describe("plugin configuration", () => {
       expect(
         tenancy()({
           collections: [auth("users"), tenants("tenants"), resources("pages")],
-        })
+        }),
       ).toEqual(
         expect.objectContaining({
           collections: expect.arrayContaining([
@@ -105,7 +105,7 @@ describe("plugin configuration", () => {
               ]),
             }),
           ]),
-        })
+        }),
       );
     });
   });
@@ -136,7 +136,7 @@ describe("plugin configuration", () => {
       .find((collection) => collection.slug === "tenants")
       .fields.find((field) => "name" in field && field.name === "domains");
     expect(domainsField).toEqual(
-      expect.objectContaining({ type: "array", name: "domains", hidden: true })
+      expect.objectContaining({ type: "array", name: "domains", hidden: true }),
     );
     expect(domainsField).not.toEqual({
       type: "array",

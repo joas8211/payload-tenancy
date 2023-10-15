@@ -58,7 +58,7 @@ export const tenancy =
                     config,
                     global,
                   }),
-                ]
+                ],
               ),
               hooks: {
                 beforeRead: [
@@ -86,7 +86,7 @@ export const tenancy =
                   ...(global.hooks?.afterChange ?? []),
                 ],
               },
-            }
+            },
       ),
       collections: [
         // Create collections for not shared globals.
@@ -104,7 +104,7 @@ export const tenancy =
                     options,
                     config,
                   }),
-                ]
+                ],
               ),
               access: {
                 create: () => false,
@@ -112,7 +112,7 @@ export const tenancy =
                 update: () => false,
                 delete: () => false,
               },
-            })
+            }),
           ),
         ...(config.collections ?? [])
           .map((collection) =>
@@ -145,7 +145,7 @@ export const tenancy =
                       createTenantParentField({ options, config, collection }),
                       createTenantDomainsField({ options, config, collection }),
                     ],
-                    []
+                    [],
                   ),
                   hooks: {
                     ...collection.hooks,
@@ -211,7 +211,7 @@ export const tenancy =
                   fields: overrideFields(
                     collection.fields,
                     [],
-                    [createUserTenantField({ options, config, collection })]
+                    [createUserTenantField({ options, config, collection })],
                   ),
                   hooks: {
                     ...collection.hooks,
@@ -259,9 +259,9 @@ export const tenancy =
                         config,
                         collection,
                       }),
-                    ]
+                    ],
                   ),
-                }
+                },
           )
           .map((collection) => {
             if (!collection.upload) {

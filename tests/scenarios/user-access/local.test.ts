@@ -65,7 +65,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: firstRootUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -76,7 +76,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: rootTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -87,7 +87,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: secondLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -98,7 +98,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: firstSecondLevelUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -109,7 +109,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: thirdLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -120,7 +120,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: firstThirdLevelUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -133,11 +133,11 @@ describe("user access", () => {
         where: { title: { equals: firstRootPost.title } },
         user: await getUserDocument(firstRootUser),
         overrideAccess: false,
-      })
+      }),
     ).resolves.toEqual(
       expect.objectContaining({
         totalDocs: 1,
-      })
+      }),
     );
   });
 
@@ -150,11 +150,11 @@ describe("user access", () => {
         where: { title: { equals: firstRootPost.title } },
         user: await getUserDocument(firstSecondLevelUser),
         overrideAccess: false,
-      })
+      }),
     ).resolves.toEqual(
       expect.objectContaining({
         totalDocs: 0,
-      })
+      }),
     );
   });
 
@@ -165,7 +165,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: secondSecondLevelUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -178,11 +178,11 @@ describe("user access", () => {
         where: { title: { equals: firstSecondLevelPost.title } },
         user: await getUserDocument(firstSecondLevelUser),
         overrideAccess: false,
-      })
+      }),
     ).resolves.toEqual(
       expect.objectContaining({
         totalDocs: 1,
-      })
+      }),
     );
   });
 
@@ -195,11 +195,11 @@ describe("user access", () => {
         where: { title: { equals: firstSecondLevelPost.title } },
         user: await getUserDocument(firstRootUser),
         overrideAccess: false,
-      })
+      }),
     ).resolves.toEqual(
       expect.objectContaining({
         totalDocs: 0,
-      })
+      }),
     );
   });
 
@@ -212,7 +212,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: thirdRootUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
@@ -223,7 +223,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: secondRootUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -234,7 +234,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: rootTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -245,7 +245,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: fourthLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -256,7 +256,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: fifthLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
@@ -269,7 +269,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: thirdSecondLevelUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
@@ -282,7 +282,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: secondSecondLevelUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -295,7 +295,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: secondThirdLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
@@ -306,7 +306,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: secondLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -315,13 +315,13 @@ describe("user access", () => {
     await createSecondSecondLevelTenantAsFirstSecondLevelUser(local).catch(
       () => {
         // We don't want error to be thrown.
-      }
+      },
     );
     await expect(
       payload.find({
         collection: "tenants",
         where: { slug: { equals: secondSecondLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
@@ -332,7 +332,7 @@ describe("user access", () => {
       payload.find({
         collection: "tenants",
         where: { slug: { equals: secondLevelTenant.slug } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
   });
 
@@ -343,7 +343,7 @@ describe("user access", () => {
       payload.find({
         collection: "users",
         where: { email: { equals: firstSecondLevelUser.email } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
@@ -362,7 +362,7 @@ describe("user access", () => {
             ],
           },
         },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
     await expect(
       payload.find({
@@ -372,7 +372,7 @@ describe("user access", () => {
             equals: firstThirdLevelUser.email,
           },
         },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 
@@ -387,7 +387,7 @@ describe("user access", () => {
             equals: firstRootUser.email,
           },
         },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 0 }));
   });
 });

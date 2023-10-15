@@ -5,7 +5,6 @@ import {
   firstRootUser,
   secondLevelTenant,
   firstSecondLevelUser,
-  secondLevelTenantWithSpecialCharacters,
 } from "./data";
 
 export default buildConfig({

@@ -9,7 +9,7 @@ if (process.argv.length < 3 || process.argv.length > 4) {
   console.error(
     "This script requires arguments to be test folder name containing Payload" +
       " config (eg. '1-setup'), and optionally robot function" +
-      " (eg. 'loadDashboard')."
+      " (eg. 'loadDashboard').",
   );
   process.exit(1);
 }

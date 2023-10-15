@@ -62,7 +62,7 @@ export const createUploadAfterReadHook =
               ...size,
               url: `${serverURL ?? ""}${basePath}/${size.filename}`,
             },
-          ])
+          ]),
         ),
       },
     };

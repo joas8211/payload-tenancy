@@ -25,8 +25,8 @@ describe("initial setup", () => {
     await registerRootUser();
     await expect(
       page.$$eval(".dashboard__card-list .card", (cards) =>
-        cards.map((card) => card.id)
-      )
+        cards.map((card) => card.id),
+      ),
     ).resolves.toEqual(["card-tenants"]);
   });
 
@@ -44,7 +44,7 @@ describe("initial setup", () => {
 
   test("cannot duplicate root tenant", async () => {
     await expect(duplicateRootTenant()).rejects.toThrowError(
-      "No element found for selector: #action-duplicate"
+      "No element found for selector: #action-duplicate",
     );
   });
 });

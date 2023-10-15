@@ -52,6 +52,6 @@ export const createUserTenantField = ({
       },
     },
     collection.fields.find(
-      (field) => "name" in field && field.name === "tenant"
-    )
+      (field) => "name" in field && field.name === "tenant",
+    ),
   );

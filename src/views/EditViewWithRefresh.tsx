@@ -11,7 +11,7 @@ export const EditViewWithRefresh: React.FC<Props> = (props) => {
       onSave.call(null, ...args);
       refreshPermissions();
     },
-    [onSave, refreshPermissions]
+    [onSave, refreshPermissions],
   );
 
   return <DefaultGlobalView {...props} onSave={modifiedOnSave} />;

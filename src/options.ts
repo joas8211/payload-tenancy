@@ -43,38 +43,38 @@ export const validateOptions = ({
   config: Config;
 }): TenancyOptions => {
   const tenantCollectionExists = config.collections?.some(
-    (collection) => collection.slug === tenantCollection
+    (collection) => collection.slug === tenantCollection,
   );
   if (!tenantCollectionExists) {
     throw new Error(
       `Tenant collection with slug '${tenantCollection}' does not exist.` +
-        " Create it or pass correct options to use tenancy plugin."
+        " Create it or pass correct options to use tenancy plugin.",
     );
   }
 
   const authCollectionExists = config.collections?.some(
-    (collection) => collection.auth
+    (collection) => collection.auth,
   );
   if (!authCollectionExists) {
     throw new Error(
-      "No authentication collection exists. Create one to use tenancy plugin."
+      "No authentication collection exists. Create one to use tenancy plugin.",
     );
   }
 
   for (const slug of sharedCollections) {
     if (slug === tenantCollection) {
       throw new Error(
-        "It's not allowed to share tenant collection between all tenants."
+        "It's not allowed to share tenant collection between all tenants.",
       );
     }
 
     if (
       config.collections?.some(
-        (collection) => collection.slug === slug && collection.auth
+        (collection) => collection.slug === slug && collection.auth,
       )
     ) {
       throw new Error(
-        "It's not allowed to share auth collection between all tenants."
+        "It's not allowed to share auth collection between all tenants.",
       );
     }
   }
