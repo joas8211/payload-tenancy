@@ -30,9 +30,11 @@ export const createUploadAfterReadHook =
     let basePath = parameters.staticURL ?? "/media";
     if (isolationStrategy === "path") {
       const { payload } = req;
-      const rawDocument = await payload.collections[
-        collection.slug
-      ].Model.findById(doc.id).exec();
+      const rawDocument = await payload.db.findOne({
+        collection: collection.slug,
+        where: { id: { equals: doc.id } },
+        req,
+      });
       if (
         !rawDocument ||
         !("tenant" in rawDocument) ||
