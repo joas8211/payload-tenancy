@@ -28,7 +28,7 @@ class CustomTestEnvironment extends PuppeteerEnvironment {
   private closeServer: (() => Promise<void>) | undefined;
 
   constructor(config, context) {
-    super(config);
+    super(config, context);
     this.rootDir = config.rootDir;
     this.testPath = context.testPath;
   }

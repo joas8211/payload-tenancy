@@ -11,7 +11,6 @@ export const initPayload = async (configPath: string) => {
   const app = express();
   const instance = await payload.init({
     secret: "dev",
-    mongoURL: "mongodb://localhost",
     express: app,
   });
 
@@ -31,15 +30,19 @@ export const initPayload = async (configPath: string) => {
     instance,
     url: "http://" + address,
     reset: async () => {
-      for (const collection of Object.values(payload.collections)) {
-        await collection.Model.deleteMany();
+      for (const collection of Object.values(
+        payload.db.connection.collections,
+      )) {
+        await collection.deleteMany({});
       }
       await payload.config.onInit(payload);
     },
-    close: () =>
-      new Promise<void>((resolve) => {
+    close: async () => {
+      await new Promise<void>((resolve) => {
         server.closeAllConnections();
         server.close(() => resolve());
-      }),
+      });
+      await payload.db.destroy(payload);
+    },
   };
 };

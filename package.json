@@ -21,6 +21,9 @@
     "payload": "^1.7.4"
   },
   "devDependencies": {
+    "@payloadcms/bundler-webpack": "^1.0.3",
+    "@payloadcms/db-mongodb": "^1.0.3",
+    "@payloadcms/richtext-slate": "^1.0.5",
     "@swc/core": "^1.3.93",
     "@swc/jest": "^0.2.24",
     "@swc/register": "^0.1.10",

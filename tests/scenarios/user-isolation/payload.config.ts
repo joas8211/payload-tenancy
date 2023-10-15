@@ -1,8 +1,10 @@
 import { buildConfig } from "payload/config";
 import { tenancy } from "../../../src/plugin";
 import { firstRootUser, rootTenant } from "./data";
+import { baseConfig } from "../../baseConfig";
 
 export default buildConfig({
+  ...baseConfig,
   plugins: [tenancy({ isolationStrategy: "user" })],
   collections: [
     {
@@ -27,6 +29,7 @@ export default buildConfig({
     },
   ],
   admin: {
+    ...baseConfig.admin,
     user: "users",
   },
   onInit: async (payload) => {
