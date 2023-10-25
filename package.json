@@ -18,7 +18,7 @@
     "dev": "nodemon tests/dev.ts"
   },
   "peerDependencies": {
-    "payload": "^1.7.4"
+    "payload": "^2.0.13"
   },
   "devDependencies": {
     "@payloadcms/bundler-webpack": "^1.0.3",
