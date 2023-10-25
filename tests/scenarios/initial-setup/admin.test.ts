@@ -45,7 +45,7 @@ describe("initial setup", () => {
 
   test("cannot duplicate root tenant", async () => {
     await expect(duplicateRootTenant()).rejects.toThrowError(
-      "Node is either not clickable or not an Element",
+      "No element found for selector: #action-duplicate",
     );
   });
 });
