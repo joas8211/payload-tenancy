@@ -15,6 +15,7 @@ import { createTenantParentField } from "./fields/tenantParent";
 import { createUserTenantField } from "./fields/userTenant";
 import { createTenantSlugField } from "./fields/tenantSlug";
 import { createTenantDomainsField } from "./fields/tenantDomains";
+import { createRefreshPermissionsField } from "./fields/refreshPermissions";
 import {
   createTenantAfterChangeHook,
   createTenantBeforeDeleteHook,
@@ -27,7 +28,6 @@ import {
   createGlobalBeforeChangeHook,
   createGlobalAfterChangeHook,
 } from "./hooks/global";
-import { EditViewWithRefresh } from "./views/EditViewWithRefresh";
 import { overrideFields } from "./utils/overrideFields";
 import { transformGlobalCollectionField } from "./utils/transformGlobalCollectionField";
 import { CollectionConfig } from "payload/types";
@@ -144,6 +144,11 @@ export const tenancy =
                       createTenantSlugField({ options, config, collection }),
                       createTenantParentField({ options, config, collection }),
                       createTenantDomainsField({ options, config, collection }),
+                      createRefreshPermissionsField({
+                        options,
+                        config,
+                        collection,
+                      }),
                     ],
                     [],
                   ),
@@ -167,13 +172,6 @@ export const tenancy =
                   admin: {
                     ...collection.admin,
                     disableDuplicate: true,
-                    components: {
-                      ...collection.admin?.components,
-                      views: {
-                        Edit: EditViewWithRefresh,
-                        ...collection.admin?.components?.views,
-                      },
-                    },
                   },
                 }
               : collection.auth

@@ -4,7 +4,7 @@ export const createAdminHelper = (
   options: { baseUrl?: string } = {},
 ): Helper => ({
   login: async (credentials: User) => {
-    await page.goto(`${options.baseUrl || payloadUrl}/admin`);
+    await page.goto(`${options.baseUrl || payloadUrl}/admin/login`);
     await page.waitForSelector("#field-email");
     await page.type("#field-email", credentials.email);
     await page.type("#field-password", credentials.password);
@@ -40,7 +40,7 @@ export const createAdminHelper = (
     await page.waitForNetworkIdle();
     await page.type("#field-slug", tenant.slug);
     for (let i = 0; i < tenant.domains.length; i++) {
-      await page.click("#field-domains .array-field__add-button-wrap button");
+      await page.click("#field-domains .array-field__add-row");
       await page.waitForSelector(`#field-domains__${i}__domain`);
       await page.type(`#field-domains__${i}__domain`, tenant.domains[i]);
     }
@@ -74,6 +74,7 @@ export const createAdminHelper = (
     await page.waitForNetworkIdle();
     await page.click(".row-1 .cell-email a");
     await page.waitForNetworkIdle();
+    await page.click(".popup");
     await page.click("#action-delete");
     await page.waitForNetworkIdle();
     await page.click("#confirm-delete");
@@ -88,6 +89,7 @@ export const createAdminHelper = (
     await page.waitForNetworkIdle();
     await page.click(".row-1 .cell-slug a");
     await page.waitForNetworkIdle();
+    await page.click(".popup");
     await page.click("#action-delete");
     await page.waitForNetworkIdle();
     await page.click("#confirm-delete");
@@ -100,6 +102,7 @@ export const createAdminHelper = (
     await page.waitForNetworkIdle();
     await page.click(".row-1 .cell-slug a");
     await page.waitForNetworkIdle();
+    await page.click(".popup");
     await page.click("#action-delete");
     await page.waitForNetworkIdle();
     await page.click("#confirm-delete");

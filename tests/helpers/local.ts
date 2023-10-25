@@ -33,7 +33,7 @@ export const createLocalHelper = (
       });
     },
     createTenant: async (tenant: Tenant) => {
-      let parent: string | undefined;
+      let parent: string | number | undefined;
       if (tenant.parent) {
         ({
           docs: [{ id: parent }],

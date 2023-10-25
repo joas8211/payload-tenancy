@@ -15,6 +15,10 @@ export default buildConfig({
       slug: "tenants",
       fields: [],
     },
+    {
+      slug: "posts",
+      fields: [],
+    },
   ],
   admin: {
     ...baseConfig.admin,

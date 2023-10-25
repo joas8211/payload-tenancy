@@ -30,14 +30,12 @@ export const initPayload = async (configPath: string) => {
     instance,
     url: "http://" + address,
     reset: async () => {
-      for (const collection of Object.values(
-        payload.db.connection.collections,
-      )) {
-        await collection.deleteMany({});
-      }
+      await payload.db.destroy(payload);
+      await payload.db.connect(payload);
       await payload.config.onInit(payload);
     },
     close: async () => {
+      console.log("close");
       await new Promise<void>((resolve) => {
         server.closeAllConnections();
         server.close(() => resolve());

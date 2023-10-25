@@ -28,26 +28,39 @@ export const createUserReadAccess =
     return ["path", "domain"].includes(options.isolationStrategy)
       ? // Limit requested tenant or its sub-tenants.
         limitAccess(await original(args), {
-          tenant: {
-            in: await getAuthorizedTenants({
-              options,
-              payload: args.req.payload,
-              tenantId: (args.req as RequestWithTenant).tenant.id,
-            }),
-          },
-        })
-      : // User must be logged in and have assigned tenant.
-        Boolean(args.req.user?.tenant) &&
-          // Limit access to users's tenant or its sub-tenants.
-          limitAccess(await original(args), {
-            tenant: {
-              in: await getAuthorizedTenants({
-                options,
-                payload: args.req.payload,
-                tenantId: args.req.user.tenant.id,
-              }),
+          or: [
+            {
+              tenant: {
+                in: await getAuthorizedTenants({
+                  options,
+                  payload: args.req.payload,
+                  tenantId: (args.req as RequestWithTenant).tenant.id,
+                }),
+              },
             },
-          });
+            // Current user must be always accessible.
+            {
+              id: {
+                equals: args.req.user.id,
+              },
+            },
+          ],
+        })
+      : // User must be logged in.
+        Boolean(args.req.user) &&
+          // Initial user doesn't have an assigned tenant during installation
+          // process, and must be allowed to access it's own profile.
+          (!args.req.user.tenant ||
+            // Limit access to users's tenant or its sub-tenants.
+            limitAccess(await original(args), {
+              tenant: {
+                in: await getAuthorizedTenants({
+                  options,
+                  payload: args.req.payload,
+                  tenantId: args.req.user.tenant.id,
+                }),
+              },
+            }));
   };
 
 /**

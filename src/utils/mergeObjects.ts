@@ -11,7 +11,7 @@
  */
 export const mergeObjects = <Obj extends object>(
   destination: Obj,
-  ...sources: Obj[]
+  ...sources: (Obj | undefined)[]
 ): Obj => {
   for (const source of sources) {
     if (!source) {

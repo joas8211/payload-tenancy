@@ -25,8 +25,9 @@ describe("user isolation", () => {
 
     const admin = createAdminHelper();
     await admin.login(firstRootUser);
+    const url = file.url as string;
     const response = await page.goto(
-      file.url.startsWith("/") ? payloadUrl + file.url : file.url,
+      url.startsWith("/") ? payloadUrl + url : url,
     );
     const body = await response.text();
     expect(body).toBe("content");

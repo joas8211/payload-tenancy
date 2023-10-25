@@ -38,7 +38,7 @@ describe("path isolation", () => {
       createFile({
         filename: "file1.txt",
         content: "content1",
-        tenantId: rootTenantDoc.id,
+        tenantId: rootTenantDoc.id as string,
       }),
     ).resolves.not.toBeFalsy();
 
@@ -46,14 +46,14 @@ describe("path isolation", () => {
       createFile({
         filename: "file2.txt",
         content: "content2",
-        tenantId: rootTenantDoc.id,
+        tenantId: rootTenantDoc.id as string,
       }),
     ).resolves.not.toBeFalsy();
 
     await expect(
       payload.find({
         collection: "media",
-        where: { tenant: rootTenantDoc.id },
+        where: { tenant: { equals: rootTenantDoc.id } },
       }),
     ).resolves.toEqual(
       expect.objectContaining({

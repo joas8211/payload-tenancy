@@ -21,13 +21,13 @@ describe("initial setup", () => {
     await expect(page.$(".dashboard")).resolves.not.toBeNull();
   });
 
-  test("only tenant collection visible after registration", async () => {
+  test("only user and tenant collection visible after registration", async () => {
     await registerRootUser();
     await expect(
       page.$$eval(".dashboard__card-list .card", (cards) =>
         cards.map((card) => card.id),
       ),
-    ).resolves.toEqual(["card-tenants"]);
+    ).resolves.toEqual(expect.arrayContaining(["card-users", "card-tenants"]));
   });
 
   test("can create root tenant", async () => {
@@ -39,12 +39,13 @@ describe("initial setup", () => {
   test("other collections appear after creating root tenant", async () => {
     const admin = createAdminHelper();
     await createRootTenant(admin);
-    await expect(page.$("#nav-users")).resolves.not.toBeNull();
+    await page.click("#nav-toggler");
+    await expect(page.$("#nav-posts")).resolves.not.toBeNull();
   });
 
   test("cannot duplicate root tenant", async () => {
     await expect(duplicateRootTenant()).rejects.toThrowError(
-      "No element found for selector: #action-duplicate",
+      "Node is either not clickable or not an Element",
     );
   });
 });

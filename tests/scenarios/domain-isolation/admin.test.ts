@@ -38,14 +38,12 @@ describe("domain isolation", () => {
             });
             response.on("end", () => {
               const body = Buffer.concat(data);
-              request
-                .respond({
-                  status: response.statusCode,
-                  headers: response.headers,
-                  body,
-                })
-                .then(() => resolve())
-                .catch((err) => reject(err));
+              request.respond({
+                status: response.statusCode,
+                headers: response.headers,
+                body,
+              });
+              resolve();
             });
           },
         );
@@ -60,6 +58,12 @@ describe("domain isolation", () => {
 
   beforeEach(async () => {
     await payloadReset();
+  });
+
+  afterAll(async () => {
+    await page.waitForNetworkIdle();
+    await page.setRequestInterception(false);
+    page.off("request");
   });
 
   test("root user can login to root tenant", async () => {
@@ -119,10 +123,9 @@ describe("domain isolation", () => {
       baseUrl: `http://${rootTenant.domains[0]}`,
     });
     await admin.login(firstRootUser);
+    const url = file.url as string;
     const response = await page.goto(
-      file.url.startsWith("/")
-        ? `http://${rootTenant.domains[0]}${file.url}`
-        : file.url,
+      url.startsWith("/") ? `http://${rootTenant.domains[0]}${url}` : url,
     );
     const body = await response.text();
     expect(body).toBe("content");
