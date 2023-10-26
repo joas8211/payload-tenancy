@@ -41,6 +41,7 @@ export const duplicateRootTenant = async () => {
   });
   await page.goto(`${payloadUrl}/admin/collections/tenants/${tenant.id}`);
   await page.waitForNetworkIdle();
+  await page.click(".popup");
   await page.click("#action-duplicate");
   await page.waitForNetworkIdle();
 };

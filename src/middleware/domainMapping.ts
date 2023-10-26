@@ -1,7 +1,8 @@
-import { Handler, Request } from "express";
+import { Handler } from "express";
 import { Payload } from "payload";
 import { Config } from "payload/config";
 import { TenancyOptions } from "../options";
+import { RequestWithTenant } from "../utils/requestWithTenant";
 
 /**
  * Map the requested hostname to correct tenant. Adds the tenant to the request
@@ -18,7 +19,7 @@ export const createDomainMapping =
     config: Config;
     payload: Payload;
   }): Handler =>
-  async (req: Request & { tenant?: string }, res, next) => {
+  async (req: RequestWithTenant, res, next) => {
     // Check that tenant exists and attach it to the request.
     req.tenant = (
       await payload.find({

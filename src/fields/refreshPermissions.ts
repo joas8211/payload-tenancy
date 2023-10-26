@@ -2,8 +2,9 @@ import { Config } from "payload/config";
 import { CollectionConfig, Field } from "payload/types";
 import { TenancyOptions } from "../options";
 import { mergeObjects } from "../utils/mergeObjects";
+import { RefreshPermissionsField } from "../components/RefreshPermissionsField";
 
-export const createTenantDomainsField = ({
+export const createRefreshPermissionsField = ({
   collection,
 }: {
   options: TenancyOptions;
@@ -12,22 +13,15 @@ export const createTenantDomainsField = ({
 }): Field =>
   mergeObjects<Field>(
     {
-      type: "array",
-      name: "domains",
-      fields: [
-        {
-          type: "text",
-          name: "domain",
-          required: true,
-        },
-      ],
+      type: "ui",
+      name: "refreshPermissions",
       admin: {
         components: {
-          RowLabel: ({ data }) => data.domain || "New Domain",
+          Field: RefreshPermissionsField,
         },
       },
     },
     collection.fields.find(
-      (field) => "name" in field && field.name == "domains",
+      (field) => "name" in field && field.name == "refreshPermissions",
     ),
   );

@@ -3,7 +3,7 @@ import { Field } from "payload/types";
 export const overrideFields = (
   original: Field[],
   frontOverrides: Field[],
-  backOverrides: Field[]
+  backOverrides: Field[],
 ): Field[] => [
   ...frontOverrides.filter(
     (field) =>
@@ -11,8 +11,8 @@ export const overrideFields = (
         (otherField) =>
           "name" in field &&
           "name" in otherField &&
-          otherField.name === field.name
-      )
+          otherField.name === field.name,
+      ),
   ),
   ...original.map(
     (field) =>
@@ -20,8 +20,8 @@ export const overrideFields = (
         (otherField) =>
           "name" in field &&
           "name" in otherField &&
-          otherField.name === field.name
-      ) || field
+          otherField.name === field.name,
+      ) || field,
   ),
   ...backOverrides.filter(
     (field) =>
@@ -29,7 +29,7 @@ export const overrideFields = (
         (otherField) =>
           "name" in field &&
           "name" in otherField &&
-          otherField.name === field.name
-      )
+          otherField.name === field.name,
+      ),
   ),
 ];

@@ -5,10 +5,11 @@ import {
   firstRootUser,
   secondLevelTenant,
   firstSecondLevelUser,
-  secondLevelTenantWithSpecialCharacters,
 } from "./data";
+import { baseConfig } from "../../baseConfig";
 
 export default buildConfig({
+  ...baseConfig,
   plugins: [tenancy({ isolationStrategy: "path" })],
   collections: [
     {
@@ -27,6 +28,7 @@ export default buildConfig({
     },
   ],
   admin: {
+    ...baseConfig.admin,
     user: "users",
   },
   onInit: async (payload) => {

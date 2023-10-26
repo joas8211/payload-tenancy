@@ -49,7 +49,7 @@ describe("path isolation", () => {
   test.skip("root user can login to tenant that has slug with special characters", async () => {
     const admin = createAdminHelper({
       baseUrl: `${payloadUrl}/${encodeURIComponent(
-        secondLevelTenantWithSpecialCharacters.slug
+        secondLevelTenantWithSpecialCharacters.slug,
       )}`,
     });
     await admin.login(firstRootUser);
@@ -82,7 +82,7 @@ describe("path isolation", () => {
     });
     await admin.login(firstRootUser);
     const response = await page.goto(
-      file.url.startsWith("/") ? payloadUrl + file.url : file.url
+      file.url.startsWith("/") ? payloadUrl + file.url : file.url,
     );
     const body = await response.text();
     expect(body).toBe("content");

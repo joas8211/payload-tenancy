@@ -1,7 +1,8 @@
-import { Handler, Request } from "express";
+import { Handler } from "express";
 import { Payload } from "payload";
 import { Config } from "payload/config";
 import { TenancyOptions } from "../options";
+import { RequestWithTenant } from "../utils/requestWithTenant";
 
 /**
  * Map the requested path to correct tenant. Adds the tenant to the request
@@ -19,7 +20,7 @@ export const createPathMapping =
     config: Config;
     payload: Payload;
   }): Handler =>
-  async (req: Request & { tenant?: string }, res, next) => {
+  async (req: RequestWithTenant, res, next) => {
     // Allow to access any admin resources like JavaScript bundles.
     const adminRoute = config.routes?.admin || "/admin";
     if (new RegExp(`^${adminRoute}.*\\.[^/]+$`).test(req.url)) {

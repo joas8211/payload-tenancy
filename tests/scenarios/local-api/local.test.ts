@@ -11,26 +11,26 @@ describe("local api with override access", () => {
           email: "some.user@root.local",
           password: "test",
         },
-      })
+      }),
     ).resolves.not.toBeFalsy();
     await expect(
       payload.find({
         collection: "users",
         where: { email: { equals: "some.user@root.local" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
     await expect(
       payload.update({
         collection: "users",
         where: { email: { equals: "some.user@root.local" } },
         data: { password: "test2" },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
     await expect(
       payload.delete({
         collection: "users",
         where: { email: { equals: "some.user@root.local" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
   });
 
@@ -42,26 +42,26 @@ describe("local api with override access", () => {
           slug: "root",
           domains: [{ domain: "root.local" }],
         },
-      })
+      }),
     ).resolves.not.toBeFalsy();
     await expect(
       payload.find({
         collection: "tenants",
         where: { slug: { equals: "root" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
     await expect(
       payload.update({
         collection: "tenants",
         where: { slug: { equals: "root" } },
         data: { domains: [{ domain: "root2.local" }] },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
     await expect(
       payload.delete({
         collection: "tenants",
         where: { slug: { equals: "root" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
   });
 
@@ -81,26 +81,26 @@ describe("local api with override access", () => {
           domains: [{ domain: "second.root.local" }],
           parent: rootTenant,
         },
-      })
+      }),
     ).resolves.not.toBeFalsy();
     await expect(
       payload.find({
         collection: "tenants",
         where: { slug: { equals: "second" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
     await expect(
       payload.update({
         collection: "tenants",
         where: { slug: { equals: "second" } },
         data: { domains: [{ domain: "second2.root.local" }] },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
     await expect(
       payload.delete({
         collection: "tenants",
         where: { slug: { equals: "second" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
   });
 
@@ -111,26 +111,26 @@ describe("local api with override access", () => {
         data: {
           title: "Welcome",
         },
-      })
+      }),
     ).resolves.not.toBeFalsy();
     await expect(
       payload.find({
         collection: "posts",
         where: { title: { equals: "Welcome" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ totalDocs: 1 }));
     await expect(
       payload.update({
         collection: "posts",
         where: { title: { equals: "Welcome" } },
         data: { title: "Welcome again" },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
     await expect(
       payload.delete({
         collection: "posts",
         where: { title: { equals: "Welcome again" } },
-      })
+      }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
   });
 });

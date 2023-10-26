@@ -35,7 +35,7 @@ export const deleteRootTenantAsFirstRootUser = async (helper: Helper) => {
 
 /** Good */
 export const createSecondLevelTenantAsFirstRootUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createSecondRootUserAsFirstRootUser(local);
@@ -45,7 +45,7 @@ export const createSecondLevelTenantAsFirstRootUser = async (
 
 /** Good */
 export const createFirstSecondLevelUserAsFirstRootUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createSecondLevelTenantAsFirstRootUser(local);
@@ -63,7 +63,7 @@ export const createThirdLevelTenantAsFirstRootUser = async (helper: Helper) => {
 
 /** Good */
 export const createFirstThirdLevelUserAsFirstRootUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createThirdLevelTenantAsFirstRootUser(local);
@@ -81,7 +81,7 @@ export const createFirstRootPostAsFirstRootUser = async (helper: Helper) => {
 
 /** Good */
 export const createSecondSecondLevelUserAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createFirstRootPostAsFirstRootUser(local);
@@ -91,7 +91,7 @@ export const createSecondSecondLevelUserAsFirstSecondLevelUser = async (
 
 /** Good */
 export const createFirstSecondLevelPostAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createSecondSecondLevelUserAsFirstSecondLevelUser(local);
@@ -101,7 +101,7 @@ export const createFirstSecondLevelPostAsFirstSecondLevelUser = async (
 
 /** Bad */
 export const createThirdRootUserAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createFirstSecondLevelPostAsFirstSecondLevelUser(local);
@@ -111,7 +111,7 @@ export const createThirdRootUserAsFirstSecondLevelUser = async (
 
 /** Bad */
 export const deleteSecondRootUserAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createFirstSecondLevelPostAsFirstSecondLevelUser(local);
@@ -121,7 +121,7 @@ export const deleteSecondRootUserAsFirstSecondLevelUser = async (
 
 /** Bad */
 export const deleteRootTenantAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createFirstSecondLevelPostAsFirstSecondLevelUser(local);
@@ -131,7 +131,7 @@ export const deleteRootTenantAsFirstSecondLevelUser = async (
 
 /** Good */
 export const createFourthLevelTenantAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createFirstSecondLevelPostAsFirstSecondLevelUser(local);
@@ -141,7 +141,7 @@ export const createFourthLevelTenantAsFirstSecondLevelUser = async (
 
 /** Good */
 export const createFifthLevelTenantAsFirstThirdLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createFourthLevelTenantAsFirstSecondLevelUser(local);
@@ -151,7 +151,7 @@ export const createFifthLevelTenantAsFirstThirdLevelUser = async (
 
 /** Good */
 export const deleteFifthLevelTenantAsFirstThirdLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await createFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -161,7 +161,7 @@ export const deleteFifthLevelTenantAsFirstThirdLevelUser = async (
 
 /** Bad */
 export const createThirdSecondLevelUserAsFirstThirdLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -171,7 +171,7 @@ export const createThirdSecondLevelUserAsFirstThirdLevelUser = async (
 
 /** Bad */
 export const deleteSecondSecondLevelUserAsFirstThirdLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -181,7 +181,7 @@ export const deleteSecondSecondLevelUserAsFirstThirdLevelUser = async (
 
 /** Bad */
 export const createSecondThirdLevelTenantAsFirstThirdLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -191,7 +191,7 @@ export const createSecondThirdLevelTenantAsFirstThirdLevelUser = async (
 
 /** Bad */
 export const deleteSecondLevelTenantAsFirstThirdLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -201,7 +201,7 @@ export const deleteSecondLevelTenantAsFirstThirdLevelUser = async (
 
 /** Bad */
 export const createSecondSecondLevelTenantAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -211,7 +211,7 @@ export const createSecondSecondLevelTenantAsFirstSecondLevelUser = async (
 
 /** Bad */
 export const deleteSecondLevelTenantAsFirstSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -221,7 +221,7 @@ export const deleteSecondLevelTenantAsFirstSecondLevelUser = async (
 
 /** Bad */
 export const deleteFirstSecondLevelUserAsSecondSecondLevelUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);
@@ -231,7 +231,7 @@ export const deleteFirstSecondLevelUserAsSecondSecondLevelUser = async (
 
 /** Good */
 export const deleteSecondLevelTenantAsSecondRootUser = async (
-  helper: Helper
+  helper: Helper,
 ) => {
   const local = createLocalHelper();
   await deleteFifthLevelTenantAsFirstThirdLevelUser(local);

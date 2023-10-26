@@ -20,10 +20,6 @@ export const createUploadAfterReadHook =
     collection: CollectionConfig;
   }): CollectionAfterReadHook =>
   async ({ doc, req }): Promise<void> => {
-    if (req.context?.skipTenancyUploadAfterReadHook) {
-      return doc;
-    }
-
     const parameters =
       typeof collection.upload === "object" ? collection.upload : {};
     if (parameters.staticURL?.startsWith("/") === false) {
@@ -34,15 +30,21 @@ export const createUploadAfterReadHook =
     let basePath = parameters.staticURL ?? "/media";
     if (isolationStrategy === "path") {
       const { payload } = req;
-      req.context.skipTenancyUploadAfterReadHook = true;
-      const { tenant } = await payload.findByID({
+      const rawDocument = await payload.db.findOne({
         collection: collection.slug,
-        id: doc.id,
-        depth: 0,
-        showHiddenFields: true,
+        where: { id: { equals: doc.id } },
         req,
       });
-      delete req.context.skipTenancyUploadAfterReadHook;
+      if (
+        !rawDocument ||
+        !("tenant" in rawDocument) ||
+        typeof rawDocument.tenant !== "string" ||
+        !rawDocument.tenant
+      ) {
+        return doc;
+      }
+
+      const { tenant } = rawDocument;
       const { slug } = await payload.findByID({
         collection: tenantCollection,
         id: tenant,
@@ -62,7 +64,7 @@ export const createUploadAfterReadHook =
               ...size,
               url: `${serverURL ?? ""}${basePath}/${size.filename}`,
             },
-          ])
+          ]),
         ),
       },
     };

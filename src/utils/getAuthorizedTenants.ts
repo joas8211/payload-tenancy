@@ -29,9 +29,9 @@ export const getAuthorizedTenants = async ({
           getAuthorizedTenants({
             options,
             payload,
-            tenantId: tenant.id,
-          })
-        )
+            tenantId: tenant.id as string,
+          }),
+        ),
       )
     ).flat(),
   ];

@@ -97,7 +97,7 @@ const extractTenantId = ({
   if (!tenantId) {
     throw new Error(
       "Could not determine tenant." +
-        " You can select tenant by setting it in user object when using Local API."
+        " You can select tenant by setting it in user object when using Local API.",
     );
   }
   return tenantId;

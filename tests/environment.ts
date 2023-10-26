@@ -7,7 +7,7 @@ import { stat } from "fs/promises";
 const findClosestFile = async (
   dir: string,
   filename: string,
-  rootDir: string
+  rootDir: string,
 ) => {
   while (
     await stat(join(dir, filename))
@@ -28,7 +28,7 @@ class CustomTestEnvironment extends PuppeteerEnvironment {
   private closeServer: (() => Promise<void>) | undefined;
 
   constructor(config, context) {
-    super(config);
+    super(config, context);
     this.rootDir = config.rootDir;
     this.testPath = context.testPath;
   }
@@ -40,7 +40,7 @@ class CustomTestEnvironment extends PuppeteerEnvironment {
       const configPath = await findClosestFile(
         dirname(this.testPath),
         "payload.config.ts",
-        this.rootDir
+        this.rootDir,
       );
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

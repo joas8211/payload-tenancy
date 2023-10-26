@@ -9,7 +9,7 @@ import { Where } from "payload/types";
  */
 export const limitAccess = (
   originalResult: AccessResult = true,
-  condition: Where
+  condition: Where,
 ): AccessResult => {
   if (originalResult === false) {
     return false;

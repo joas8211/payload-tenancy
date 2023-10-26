@@ -2,7 +2,7 @@ import { Payload } from "payload";
 import { Helper, Post, Tenant, User } from "./common";
 
 export const createLocalHelper = (
-  options: { payload?: Payload; overrideAccess?: boolean } = {}
+  options: { payload?: Payload; overrideAccess?: boolean } = {},
 ): Helper => {
   const instance = options.payload || payload;
   let loggedInUser: unknown;
@@ -33,7 +33,7 @@ export const createLocalHelper = (
       });
     },
     createTenant: async (tenant: Tenant) => {
-      let parent: string | undefined;
+      let parent: string | number | undefined;
       if (tenant.parent) {
         ({
           docs: [{ id: parent }],

@@ -28,7 +28,7 @@ export const createTenantAfterChangeHook =
     if (tenantCount !== 1) return;
 
     const authCollections = config.collections?.filter(
-      (collection) => collection.auth
+      (collection) => collection.auth,
     );
     for (const { slug: collection } of authCollections) {
       const { docs: users } = await payload.find({ collection });
@@ -73,7 +73,7 @@ export const createTenantBeforeDeleteHook =
 
     // Delete users of this tenant
     const authCollections = config.collections.filter(
-      (collection) => collection.auth
+      (collection) => collection.auth,
     );
     for (const { slug: collection } of authCollections) {
       const users = (

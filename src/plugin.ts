@@ -15,6 +15,7 @@ import { createTenantParentField } from "./fields/tenantParent";
 import { createUserTenantField } from "./fields/userTenant";
 import { createTenantSlugField } from "./fields/tenantSlug";
 import { createTenantDomainsField } from "./fields/tenantDomains";
+import { createRefreshPermissionsField } from "./fields/refreshPermissions";
 import {
   createTenantAfterChangeHook,
   createTenantBeforeDeleteHook,
@@ -27,7 +28,6 @@ import {
   createGlobalBeforeChangeHook,
   createGlobalAfterChangeHook,
 } from "./hooks/global";
-import { EditViewWithRefresh } from "./views/EditViewWithRefresh";
 import { overrideFields } from "./utils/overrideFields";
 import { transformGlobalCollectionField } from "./utils/transformGlobalCollectionField";
 import { CollectionConfig } from "payload/types";
@@ -58,7 +58,7 @@ export const tenancy =
                     config,
                     global,
                   }),
-                ]
+                ],
               ),
               hooks: {
                 beforeRead: [
@@ -86,7 +86,7 @@ export const tenancy =
                   ...(global.hooks?.afterChange ?? []),
                 ],
               },
-            }
+            },
       ),
       collections: [
         // Create collections for not shared globals.
@@ -104,7 +104,7 @@ export const tenancy =
                     options,
                     config,
                   }),
-                ]
+                ],
               ),
               access: {
                 create: () => false,
@@ -112,7 +112,7 @@ export const tenancy =
                 update: () => false,
                 delete: () => false,
               },
-            })
+            }),
           ),
         ...(config.collections ?? [])
           .map((collection) =>
@@ -144,8 +144,13 @@ export const tenancy =
                       createTenantSlugField({ options, config, collection }),
                       createTenantParentField({ options, config, collection }),
                       createTenantDomainsField({ options, config, collection }),
+                      createRefreshPermissionsField({
+                        options,
+                        config,
+                        collection,
+                      }),
                     ],
-                    []
+                    [],
                   ),
                   hooks: {
                     ...collection.hooks,
@@ -167,13 +172,6 @@ export const tenancy =
                   admin: {
                     ...collection.admin,
                     disableDuplicate: true,
-                    components: {
-                      ...collection.admin?.components,
-                      views: {
-                        Edit: EditViewWithRefresh,
-                        ...collection.admin?.components?.views,
-                      },
-                    },
                   },
                 }
               : collection.auth
@@ -211,7 +209,7 @@ export const tenancy =
                   fields: overrideFields(
                     collection.fields,
                     [],
-                    [createUserTenantField({ options, config, collection })]
+                    [createUserTenantField({ options, config, collection })],
                   ),
                   hooks: {
                     ...collection.hooks,
@@ -259,9 +257,9 @@ export const tenancy =
                         config,
                         collection,
                       }),
-                    ]
+                    ],
                   ),
-                }
+                },
           )
           .map((collection) => {
             if (!collection.upload) {
