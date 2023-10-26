@@ -38,7 +38,7 @@ export const createResourceReadAccess =
           // Limit access to users's tenant.
           limitAccess(await original(args), {
             tenant: {
-              equals: typeof args.req.user.tenant === 'string' ? args.req.user.tenant : args.req.user.tenant.id,
+              equals: args.req.user.tenant?.id ?? args.req.user.tenant.id,
             },
           });
   };
