@@ -107,7 +107,7 @@ const initGlobal = ({
   config: Config;
   global: GlobalConfig;
   req: PayloadRequest;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }) =>
   req.payload.create({
     collection: global.slug + "Globals",
