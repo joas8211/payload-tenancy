@@ -292,7 +292,8 @@ export const tenancy =
         api: basePath + (config.routes?.api ?? "/api"),
         graphQL: basePath + (config.routes?.graphQL ?? "/graphql"),
         graphQLPlayground:
-          basePath + (config.routes?.graphQLPlayground ?? "/playground"),
+          basePath +
+          (config.routes?.graphQLPlayground ?? "/graphql-playground"),
       },
       onInit: createInitHook({ options, config }),
     };
