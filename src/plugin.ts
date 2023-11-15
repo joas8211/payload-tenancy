@@ -30,6 +30,7 @@ import {
 } from "./hooks/global";
 import { overrideFields } from "./utils/overrideFields";
 import { transformGlobalCollectionField } from "./utils/transformGlobalCollectionField";
+import { transformGlobalField } from "./utils/transformGlobalField";
 import { CollectionConfig } from "payload/types";
 
 export const tenancy =
@@ -50,7 +51,7 @@ export const tenancy =
           : {
               ...global,
               fields: overrideFields(
-                global.fields,
+                global.fields.map(transformGlobalField),
                 [],
                 [
                   createResourceTenantField({
