@@ -49,3 +49,11 @@ wanted state as the second argument.
 ```shell
 $ yarn dev tests/scenarios/initial-setup createRootTenant
 ```
+
+## PostgreSQL
+
+You can run tests using real PostgreSQL database with Docker:
+
+```shell
+$ docker-compose up
+```

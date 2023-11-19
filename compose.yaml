@@ -1,0 +1,23 @@
+services:
+  test:
+    build: .
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_URI: postgres://postgres:postgres@postgres/postgres
+    cap_add:
+      - SYS_ADMIN
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  node_modules:
+  pgdata:

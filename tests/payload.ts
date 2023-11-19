@@ -6,6 +6,9 @@ export const initPayload = async (configPath: string) => {
   // Pass some configuration through environment variables.
   process.env.NODE_ENV = "test";
   process.env.PAYLOAD_CONFIG_PATH = configPath;
+  process.env.PAYLOAD_DROP_DATABASE = process.env.POSTGRES_URI
+    ? "true"
+    : "false";
 
   // Initialize Payload.
   const app = express();
@@ -35,7 +38,6 @@ export const initPayload = async (configPath: string) => {
       await payload.config.onInit(payload);
     },
     close: async () => {
-      console.log("close");
       await new Promise<void>((resolve) => {
         server.closeAllConnections();
         server.close(() => resolve());
