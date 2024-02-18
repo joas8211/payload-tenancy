@@ -6,7 +6,9 @@ import {
   secondLevelTenant,
   firstSecondLevelUser,
 } from "./data";
-import { baseConfig } from "../../baseConfig";
+import { createBaseConfig } from "../../baseConfig";
+
+const baseConfig = createBaseConfig();
 
 export default buildConfig({
   ...baseConfig,

@@ -1,6 +1,7 @@
 import { CollectionConfig } from "payload/types";
 import { tenancy } from "../../../src/plugin";
-import { baseConfig } from "../../baseConfig";
+import { createBaseConfig } from "../../baseConfig";
+import { Config } from "payload/config";
 
 const auth = (slug: string): CollectionConfig => ({
   slug,
@@ -20,10 +21,12 @@ const resources = (slug: string): CollectionConfig => ({
 
 describe("plugin configuration", () => {
   test("validates auth collection exists", () => {
-    expect(() => tenancy()({ collections: [tenants("tenants")] })).toThrow();
+    expect(() =>
+      tenancy()({ collections: [tenants("tenants")] } as Config),
+    ).toThrow();
     expect(() =>
       tenancy()({
-        ...baseConfig,
+        ...createBaseConfig(),
         collections: [auth("AUTH"), tenants("tenants")],
       }),
     ).not.toThrow();
@@ -33,13 +36,13 @@ describe("plugin configuration", () => {
     it("validates collection to exist", () => {
       expect(() =>
         tenancy({ tenantCollection: "TENANTS" })({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users")],
         }),
       ).toThrow();
       expect(() =>
         tenancy({ tenantCollection: "TENANTS" })({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users"), tenants("TENANTS")],
         }),
       ).not.toThrow();
@@ -48,7 +51,7 @@ describe("plugin configuration", () => {
     it("defaults to collection with slug 'tenants'", () => {
       expect(() =>
         tenancy()({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users"), tenants("tenants")],
         }),
       ).not.toThrow();
@@ -59,7 +62,7 @@ describe("plugin configuration", () => {
     it("does not allow you to opt-out tenant collection", () => {
       expect(() =>
         tenancy({ sharedCollections: ["tenants"] })({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users"), tenants("tenants")],
         }),
       ).toThrow();
@@ -68,7 +71,7 @@ describe("plugin configuration", () => {
           tenantCollection: "TENANTS",
           sharedCollections: ["TENANTS"],
         })({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users"), tenants("TENANTS")],
         }),
       ).toThrow();
@@ -77,13 +80,13 @@ describe("plugin configuration", () => {
     it("does not allow you to opt-out auth collection", () => {
       expect(() =>
         tenancy({ sharedCollections: ["users"] })({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users"), tenants("tenants")],
         }),
       ).toThrow();
       expect(() =>
         tenancy({ sharedCollections: ["otherUsers"] })({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("otherUsers"), tenants("tenants")],
         }),
       ).toThrow();
@@ -92,7 +95,7 @@ describe("plugin configuration", () => {
     it("allows you to opt-out resource collection", () => {
       expect(
         tenancy({ sharedCollections: ["pages"] })({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users"), tenants("tenants"), resources("pages")],
         }),
       ).toEqual(
@@ -105,7 +108,7 @@ describe("plugin configuration", () => {
     it("defaults to nothing", () => {
       expect(
         tenancy()({
-          ...baseConfig,
+          ...createBaseConfig(),
           collections: [auth("users"), tenants("tenants"), resources("pages")],
         }),
       ).toEqual(
@@ -126,7 +129,7 @@ describe("plugin configuration", () => {
   test("tenant domains field can be hidden", async () => {
     const domainsField = (
       await tenancy()({
-        ...baseConfig,
+        ...createBaseConfig(),
         collections: [
           {
             slug: "users",

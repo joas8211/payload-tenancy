@@ -19,11 +19,12 @@ export const createTenantAfterChangeHook =
     options: TenancyOptions;
     config: Config;
   }): CollectionAfterChangeHook =>
-  async ({ doc, operation, req: { payload } }): Promise<void> => {
+  async ({ doc, operation, req }): Promise<void> => {
     if (operation !== "create") return;
 
+    const { payload } = req;
     const tenantCount = (
-      await payload.find({ collection: tenantCollection, limit: 0 })
+      await payload.find({ req, collection: tenantCollection, limit: 2 })
     ).totalDocs;
     if (tenantCount !== 1) return;
 
@@ -31,9 +32,10 @@ export const createTenantAfterChangeHook =
       (collection) => collection.auth,
     );
     for (const { slug: collection } of authCollections) {
-      const { docs: users } = await payload.find({ collection });
+      const { docs: users } = await payload.find({ req, collection });
       for (const { id } of users) {
         await payload.update({
+          req,
           collection,
           id,
           data: { tenant: doc.id },

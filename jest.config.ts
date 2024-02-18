@@ -11,9 +11,10 @@ const jestConfig: Config = {
   },
   globalSetup: "jest-environment-puppeteer/setup",
   globalTeardown: "jest-environment-puppeteer/teardown",
-  testEnvironment: "<rootDir>/tests/environment.ts",
+  testEnvironment: "jest-environment-puppeteer",
   testTimeout: 60_000,
   forceExit: true,
+  maxWorkers: 1,
 };
 
 export default jestConfig;

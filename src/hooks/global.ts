@@ -110,6 +110,7 @@ const initGlobal = ({
   data?: Record<string, unknown>;
 }) =>
   req.payload.create({
+    req,
     collection: global.slug + "Globals",
     data: {
       ...(data ?? {}),
@@ -130,6 +131,7 @@ const getGlobal = async ({
   const {
     docs: [doc],
   } = await req.payload.find({
+    req,
     collection: global.slug + "Globals",
     where: {
       tenant: {

@@ -22,13 +22,30 @@ extensions.
 
 ## Server
 
-Admin and API tests require payload.config.ts to exist in the same directory or
-upper directory. It's used to initialize Payload application. Those tests get
-global variables that can be used to interact with the server.
+To initialize Payload server, run `initPayload` from payload.ts before all
+tests. Remember to run `reset` before each test and `close` after all tests.
 
-- `payloadUrl` - URL to the running HTTP server, eg. "http://127.0.0.1:1234"
-  (note that port is not static).
-- `payloadReset` - Reset Payload by removing all existing documents.
+Example:
+
+```typescript
+describe("scenario", () => {
+  let url: string;
+  let reset: () => Promise<void>;
+  let close: () => Promise<void>;
+
+  beforeAll(async () => {
+    ({ url, close, reset } = await initPayload({ dir: __dirname }));
+  });
+
+  beforeEach(async () => {
+    await reset();
+  });
+
+  afterAll(async () => {
+    await close();
+  });
+});
+```
 
 ## Robot
 

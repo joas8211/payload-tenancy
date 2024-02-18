@@ -1,3 +1,4 @@
+import { TypeWithID } from "payload/types";
 import { createAdminHelper } from "../../helpers/admin";
 import {
   firstRootUser,
@@ -6,15 +7,29 @@ import {
   secondLevelTenant,
   secondLevelTenantWithSpecialCharacters,
 } from "./data";
+import { initPayload } from "../../payload";
+import payload from "payload";
 
 describe("path isolation", () => {
+  let url: string;
+  let reset: () => Promise<void>;
+  let close: () => Promise<void>;
+
+  beforeAll(async () => {
+    ({ url, close, reset } = await initPayload({ dir: __dirname }));
+  });
+
   beforeEach(async () => {
-    await payloadReset();
+    await reset();
+  });
+
+  afterAll(async () => {
+    await close();
   });
 
   test("root user can login to root tenant", async () => {
     const admin = createAdminHelper({
-      baseUrl: `${payloadUrl}/${encodeURIComponent(rootTenant.slug)}`,
+      url: `${url}/${encodeURIComponent(rootTenant.slug)}`,
     });
     await admin.login(firstRootUser);
     await expect(page.$(".dashboard")).resolves.not.toBeNull();
@@ -22,7 +37,7 @@ describe("path isolation", () => {
 
   test("second level user can login to second level tenant", async () => {
     const admin = createAdminHelper({
-      baseUrl: `${payloadUrl}/${encodeURIComponent(secondLevelTenant.slug)}`,
+      url: `${url}/${encodeURIComponent(secondLevelTenant.slug)}`,
     });
     await admin.login(firstSecondLevelUser);
     await expect(page.$(".dashboard")).resolves.not.toBeNull();
@@ -30,7 +45,7 @@ describe("path isolation", () => {
 
   test("root user can login to second level tenant", async () => {
     const admin = createAdminHelper({
-      baseUrl: `${payloadUrl}/${encodeURIComponent(secondLevelTenant.slug)}`,
+      url: `${url}/${encodeURIComponent(secondLevelTenant.slug)}`,
     });
     await admin.login(firstRootUser);
     await expect(page.$(".dashboard")).resolves.not.toBeNull();
@@ -38,7 +53,7 @@ describe("path isolation", () => {
 
   test("second level user cannot login to root tenant", async () => {
     const admin = createAdminHelper({
-      baseUrl: `${payloadUrl}/${encodeURIComponent(rootTenant.slug)}`,
+      url: `${url}/${encodeURIComponent(rootTenant.slug)}`,
     });
     await admin.login(firstSecondLevelUser);
     await expect(page.$(".dashboard")).resolves.toBeNull();
@@ -48,7 +63,7 @@ describe("path isolation", () => {
   // Tracked here: https://github.com/joas8211/payload-tenancy/issues/12
   test.skip("root user can login to tenant that has slug with special characters", async () => {
     const admin = createAdminHelper({
-      baseUrl: `${payloadUrl}/${encodeURIComponent(
+      url: `${url}/${encodeURIComponent(
         secondLevelTenantWithSpecialCharacters.slug,
       )}`,
     });
@@ -64,7 +79,7 @@ describe("path isolation", () => {
       where: { slug: { equals: rootTenant.slug } },
     });
     const buffer = Buffer.from("content");
-    const file = await payload.create({
+    const file = (await payload.create({
       collection: "media",
       data: {
         tenant: rootTenantDoc.id,
@@ -75,14 +90,14 @@ describe("path isolation", () => {
         name: "file.txt",
         size: buffer.byteLength,
       },
-    });
+    })) as TypeWithID & { url: string };
 
     const admin = createAdminHelper({
-      baseUrl: `${payloadUrl}/${encodeURIComponent(rootTenant.slug)}`,
+      url: `${url}/${encodeURIComponent(rootTenant.slug)}`,
     });
     await admin.login(firstRootUser);
     const response = await page.goto(
-      file.url.startsWith("/") ? payloadUrl + file.url : file.url,
+      file.url.startsWith("/") ? url + file.url : file.url,
     );
     const body = await response.text();
     expect(body).toBe("content");

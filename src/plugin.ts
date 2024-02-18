@@ -176,91 +176,91 @@ export const tenancy =
                   },
                 }
               : collection.auth
-              ? // Modify user collections
-                {
-                  ...collection,
-                  access: {
-                    ...collection.access,
-                    create: createUserCreateAccess({
-                      options,
-                      config,
-                      original: collection.access?.create,
-                    }),
-                    read: createUserReadAccess({
-                      options,
-                      config,
-                      original: collection.access?.read,
-                    }),
-                    update: createUserReadAccess({
-                      options,
-                      config,
-                      original: collection.access?.update,
-                    }),
-                    delete: createUserReadAccess({
-                      options,
-                      config,
-                      original: collection.access?.delete,
-                    }),
-                    admin: createAdminAccess({
-                      options,
-                      config,
-                      original: collection.access?.admin,
-                    }),
-                  },
-                  fields: overrideFields(
-                    collection.fields,
-                    [],
-                    [createUserTenantField({ options, config, collection })],
-                  ),
-                  hooks: {
-                    ...collection.hooks,
-                    beforeLogin: [
-                      ...(collection.hooks?.beforeLogin || []),
-                      createRestrictLogin({ options, config }),
-                    ],
-                  },
-                }
-              : options.sharedCollections.includes(collection.slug)
-              ? // Do not modify the collection (opt-out)
-                collection
-              : // Modify resource collections
-                {
-                  ...collection,
-                  access: {
-                    ...collection.access,
-                    create: createResourceCreateAccess({
-                      options,
-                      config,
-                      original: collection.access?.create,
-                    }),
-                    read: createResourceReadAccess({
-                      options,
-                      config,
-                      original: collection.access?.read,
-                    }),
-                    update: createResourceReadAccess({
-                      options,
-                      config,
-                      original: collection.access?.update,
-                    }),
-                    delete: createResourceReadAccess({
-                      options,
-                      config,
-                      original: collection.access?.delete,
-                    }),
-                  },
-                  fields: overrideFields(
-                    collection.fields,
-                    [],
-                    [
-                      createResourceTenantField({
+                ? // Modify user collections
+                  {
+                    ...collection,
+                    access: {
+                      ...collection.access,
+                      create: createUserCreateAccess({
                         options,
                         config,
-                        collection,
+                        original: collection.access?.create,
                       }),
-                    ],
-                  ),
-                },
+                      read: createUserReadAccess({
+                        options,
+                        config,
+                        original: collection.access?.read,
+                      }),
+                      update: createUserReadAccess({
+                        options,
+                        config,
+                        original: collection.access?.update,
+                      }),
+                      delete: createUserReadAccess({
+                        options,
+                        config,
+                        original: collection.access?.delete,
+                      }),
+                      admin: createAdminAccess({
+                        options,
+                        config,
+                        original: collection.access?.admin,
+                      }),
+                    },
+                    fields: overrideFields(
+                      collection.fields,
+                      [],
+                      [createUserTenantField({ options, config, collection })],
+                    ),
+                    hooks: {
+                      ...collection.hooks,
+                      beforeLogin: [
+                        ...(collection.hooks?.beforeLogin || []),
+                        createRestrictLogin({ options, config }),
+                      ],
+                    },
+                  }
+                : options.sharedCollections.includes(collection.slug)
+                  ? // Do not modify the collection (opt-out)
+                    collection
+                  : // Modify resource collections
+                    {
+                      ...collection,
+                      access: {
+                        ...collection.access,
+                        create: createResourceCreateAccess({
+                          options,
+                          config,
+                          original: collection.access?.create,
+                        }),
+                        read: createResourceReadAccess({
+                          options,
+                          config,
+                          original: collection.access?.read,
+                        }),
+                        update: createResourceReadAccess({
+                          options,
+                          config,
+                          original: collection.access?.update,
+                        }),
+                        delete: createResourceReadAccess({
+                          options,
+                          config,
+                          original: collection.access?.delete,
+                        }),
+                      },
+                      fields: overrideFields(
+                        collection.fields,
+                        [],
+                        [
+                          createResourceTenantField({
+                            options,
+                            config,
+                            collection,
+                          }),
+                        ],
+                      ),
+                    },
           )
           .map((collection) => {
             if (!collection.upload) {

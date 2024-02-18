@@ -1,6 +1,8 @@
 import { buildConfig } from "payload/config";
 import { tenancy } from "../../../src/plugin";
-import { baseConfig } from "../../baseConfig";
+import { createBaseConfig } from "../../baseConfig";
+
+const baseConfig = createBaseConfig();
 
 export default buildConfig({
   ...baseConfig,

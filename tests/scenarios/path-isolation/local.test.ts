@@ -1,6 +1,23 @@
+import payload from "payload";
+import { initPayload } from "../../payload";
 import { rootTenant } from "./data";
 
 describe("path isolation", () => {
+  let reset: () => Promise<void>;
+  let close: () => Promise<void>;
+
+  beforeAll(async () => {
+    ({ close, reset } = await initPayload({ dir: __dirname, local: true }));
+  });
+
+  beforeEach(async () => {
+    await reset();
+  });
+
+  afterAll(async () => {
+    await close();
+  });
+
   test("local API can create and find multiple files with correct URLs", async () => {
     const createFile = async ({
       filename,

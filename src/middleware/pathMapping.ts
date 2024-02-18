@@ -23,7 +23,7 @@ export const createPathMapping =
   async (req: RequestWithTenant, res, next) => {
     // Allow to access any admin resources like JavaScript bundles.
     const adminRoute = config.routes?.admin || "/admin";
-    if (new RegExp(`^${adminRoute}.*\\.[^/]+$`).test(req.url)) {
+    if (new RegExp(`^${adminRoute}(/@|.*\\.[^/]+$)`).test(req.url)) {
       next();
       return;
     }

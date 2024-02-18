@@ -15,6 +15,7 @@ export interface Post {
 }
 
 export interface Helper {
+  url: string;
   login: (user: User) => Promise<void>;
   logout: () => Promise<void>;
   createUser: (user: User) => Promise<void>;

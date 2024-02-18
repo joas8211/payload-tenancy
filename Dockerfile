@@ -15,4 +15,5 @@ WORKDIR /home/node/app
 # Create mountpoint for node_modueles.
 RUN mkdir node_modules
 
-CMD yarn install && yarn test --runInBand
+ENV PAYLOAD_HOST=0.0.0.0
+ENV PAYLOAD_PORT=3000

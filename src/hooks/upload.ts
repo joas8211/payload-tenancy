@@ -38,7 +38,8 @@ export const createUploadAfterReadHook =
       if (
         !rawDocument ||
         !("tenant" in rawDocument) ||
-        typeof rawDocument.tenant !== "string" ||
+        (typeof rawDocument.tenant !== "string" &&
+          typeof rawDocument.tenant !== "number") ||
         !rawDocument.tenant
       ) {
         return doc;

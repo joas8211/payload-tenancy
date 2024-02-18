@@ -1,6 +1,20 @@
+import payload from "payload";
+import { initPayload } from "../../payload";
+
 describe("local api with override access", () => {
+  let reset: () => Promise<void>;
+  let close: () => Promise<void>;
+
+  beforeAll(async () => {
+    ({ close, reset } = await initPayload({ dir: __dirname, local: true }));
+  });
+
   beforeEach(async () => {
-    await payloadReset();
+    await reset();
+  });
+
+  afterAll(async () => {
+    await close();
   });
 
   test("can create, find, update, and delete first user without tenant", async () => {
@@ -23,13 +37,13 @@ describe("local api with override access", () => {
       payload.update({
         collection: "users",
         where: { email: { equals: "some.user@root.local" } },
-        data: { password: "test2" },
+        data: { email: "same.user@root.local" },
       }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
     await expect(
       payload.delete({
         collection: "users",
-        where: { email: { equals: "some.user@root.local" } },
+        where: { email: { equals: "same.user@root.local" } },
       }),
     ).resolves.toEqual(expect.objectContaining({ errors: [] }));
   });
@@ -79,7 +93,7 @@ describe("local api with override access", () => {
         data: {
           slug: "second",
           domains: [{ domain: "second.root.local" }],
-          parent: rootTenant,
+          parent: rootTenant.id,
         },
       }),
     ).resolves.not.toBeFalsy();

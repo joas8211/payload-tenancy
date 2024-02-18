@@ -1,3 +1,4 @@
+import payload from "payload";
 import { User } from "../../helpers/common";
 import { createLocalHelper } from "../../helpers/local";
 import {
@@ -43,6 +44,7 @@ import {
   deleteSecondRootUserAsFirstSecondLevelUser,
   deleteSecondSecondLevelUserAsFirstThirdLevelUser,
 } from "./robot";
+import { initPayload } from "../../payload";
 
 const getUserDocument = async (user: User) => {
   return (
@@ -54,8 +56,19 @@ const getUserDocument = async (user: User) => {
 };
 
 describe("user access", () => {
+  let reset: () => Promise<void>;
+  let close: () => Promise<void>;
+
+  beforeAll(async () => {
+    ({ close, reset } = await initPayload({ dir: __dirname, local: true }));
+  });
+
   beforeEach(async () => {
-    await payloadReset();
+    await reset();
+  });
+
+  afterAll(async () => {
+    await close();
   });
 
   test("root user can add users for root tenant", async () => {

@@ -1,4 +1,4 @@
-import { Payload } from "payload";
+import payload, { Payload } from "payload";
 import { Helper, Post, Tenant, User } from "./common";
 
 export const createLocalHelper = (
@@ -7,6 +7,7 @@ export const createLocalHelper = (
   const instance = options.payload || payload;
   let loggedInUser: unknown;
   return {
+    url: "",
     login: async (user: User) => {
       ({
         docs: [loggedInUser],

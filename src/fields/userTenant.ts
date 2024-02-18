@@ -1,5 +1,5 @@
 import { Config } from "payload/config";
-import { CollectionConfig, Document, Field, Validate } from "payload/types";
+import { CollectionConfig, Field, Validate } from "payload/types";
 import { TenancyOptions } from "../options";
 import { getAuthorizedTenants } from "../utils/getAuthorizedTenants";
 import { mergeObjects } from "../utils/mergeObjects";
@@ -18,11 +18,14 @@ const createValidate =
     // Skip the following validations on front-end.
     if (!payload) return true;
 
+    // Skip the following validations when user does not have tenant yet.
+    if (!user.tenant) return true;
+
     // Check that the selected value is some tenant that user has access to.
     const authorizedTenants = await getAuthorizedTenants({
       options,
       payload,
-      tenantId: (user as Document).tenant.id,
+      tenantId: user.tenant.id || user.tenant,
     });
     if (!authorizedTenants.includes(value)) return "Unauthorized";
 

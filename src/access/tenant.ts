@@ -46,7 +46,7 @@ export const createTenantReadAccess =
                 in: await getAuthorizedTenants({
                   options,
                   payload: args.req.payload,
-                  tenantId: args.req.user.tenant.id,
+                  tenantId: args.req.user.tenant.id || args.req.user.tenant,
                 }),
               },
             }));
@@ -92,7 +92,7 @@ export const createTenantDeleteAccess =
               in: await getAuthorizedTenants({
                 options,
                 payload: args.req.payload,
-                tenantId: args.req.user.tenant.id,
+                tenantId: args.req.user.tenant.id || args.req.user.tenant,
               }),
             },
           }))

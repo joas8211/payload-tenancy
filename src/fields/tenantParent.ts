@@ -1,11 +1,5 @@
 import { Config } from "payload/config";
-import {
-  CollectionConfig,
-  Document,
-  Field,
-  FieldAccess,
-  Validate,
-} from "payload/types";
+import { CollectionConfig, Field, FieldAccess, Validate } from "payload/types";
 import { TenancyOptions } from "../options";
 import { getAuthorizedTenants } from "../utils/getAuthorizedTenants";
 import { mergeObjects } from "../utils/mergeObjects";
@@ -16,11 +10,13 @@ import { mergeObjects } from "../utils/mergeObjects";
  */
 const createAccess =
   (options: TenancyOptions): FieldAccess =>
-  async ({ doc, req: { payload, user } }) => {
+  async ({ doc, req }) => {
+    const { payload, user } = req;
+
     // When there's no tenants yet, there's no need to access parent field.
     const someTenantExist =
       payload &&
-      (await payload.find({ collection: options.tenantCollection, limit: 0 }))
+      (await payload.find({ req, collection: options.tenantCollection }))
         .totalDocs > 0;
     if (!someTenantExist) return false;
 
@@ -40,7 +36,7 @@ const createAccess =
     const authorizedTenants = await getAuthorizedTenants({
       options,
       payload,
-      tenantId: user.tenant.id,
+      tenantId: user.tenant.id || user.tenant,
     });
     return authorizedTenants.includes(parentTenantId);
   };
@@ -97,7 +93,7 @@ const createValidate =
     const authorizedTenants = await getAuthorizedTenants({
       options,
       payload,
-      tenantId: (user as Document).tenant.id,
+      tenantId: user.tenant.id || user.tenant,
     });
     if (!authorizedTenants.includes(value)) return "Unauthorized";
 

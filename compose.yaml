@@ -1,6 +1,7 @@
 services:
   test:
     build: .
+    command: sh -c "yarn install && yarn test"
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
@@ -8,8 +9,13 @@ services:
       - postgres
     environment:
       POSTGRES_URI: postgres://postgres:postgres@postgres/postgres
+      PAYLOAD_HOST: "0.0.0.0"
+      PAYLOAD_PORT: 3000
     cap_add:
       - SYS_ADMIN
+    ports:
+      - 3000:3000
+      - 3001:3001
 
   postgres:
     image: postgres:16-alpine
