@@ -45,7 +45,7 @@ export const createGlobalBeforeChangeHook =
     global: GlobalConfig;
   }): BeforeChangeHook =>
   async ({ data, req }) => {
-    let doc = await getGlobal({
+    const doc = await getGlobal({
       options,
       config,
       global,
@@ -53,7 +53,9 @@ export const createGlobalBeforeChangeHook =
     });
 
     if (!doc) {
-      doc = await initGlobal({ options, config, global, req, data });
+      await initGlobal({ options, config, global, req, data });
+    } else {
+      await updateGlobal({ options, config, global, req, data });
     }
 
     return {};
@@ -112,6 +114,32 @@ const initGlobal = ({
   req.payload.create({
     req,
     collection: global.slug + "Globals",
+    data: {
+      ...(data ?? {}),
+      tenant: extractTenantId({ options, req }),
+    },
+  });
+
+const updateGlobal = ({
+  options,
+  global,
+  req,
+  data,
+}: {
+  options: TenancyOptions;
+  config: Config;
+  global: GlobalConfig;
+  req: PayloadRequest;
+  data?: Record<string, unknown>;
+}) =>
+  req.payload.update({
+    req,
+    collection: global.slug + "Globals",
+    where: {
+      tenant: {
+        equals: extractTenantId({ options, req }),
+      },
+    },
     data: {
       ...(data ?? {}),
       tenant: extractTenantId({ options, req }),
