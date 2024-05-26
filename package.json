@@ -15,7 +15,7 @@
     "watch": "tsc --watch",
     "lint": "eslint .",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "dev": "nodemon tests/dev.ts"
+    "dev": "ts-node tests/dev.ts"
   },
   "peerDependencies": {
     "payload": "^2.11.1"
