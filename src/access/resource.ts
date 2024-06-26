@@ -34,13 +34,13 @@ export const createResourceReadAccess =
           },
         })
       : // User must be logged in and have assigned tenant.
-        Boolean(args.req.user?.tenant) &&
+        (Boolean(options.allowPublicCollections) &&  await original(args)) || (Boolean(args.req.user?.tenant) &&
           // Limit access to users's tenant.
           limitAccess(await original(args), {
             tenant: {
               equals: args.req.user.tenant.id || args.req.user.tenant,
             },
-          });
+          }));
   };
 
 /**
