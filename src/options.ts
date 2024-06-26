@@ -17,6 +17,11 @@ export interface TenancyOptions {
   isolationStrategy: "user" | "path" | "domain";
 
   /**
+   * Allow public collections in user isolationStrategy
+   */
+  allowPublicCollections: boolean;
+  
+  /**
    * Slugs of collections you want to share between all tenants. Specifying
    * collection here will opt it out from tenant isolation.
    */
@@ -34,6 +39,7 @@ export const validateOptions = ({
   options: {
     tenantCollection = "tenants",
     isolationStrategy = "user",
+    allowPublicCollections = false,
     sharedCollections = [],
     sharedGlobals = [],
   },
@@ -82,6 +88,7 @@ export const validateOptions = ({
   return {
     tenantCollection,
     isolationStrategy,
+    allowPublicCollections,
     sharedCollections,
     sharedGlobals,
   };
