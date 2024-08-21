@@ -80,13 +80,11 @@ var createPathMapping = function (_a) {
                 case 1:
                     // Check that tenant exists and attach it to the request.
                     _a.tenant = (_c.sent()).docs[0];
-                    if (!req.tenant) {
-                        res.status(404).send();
-                        return [2 /*return*/];
-                    }
                     // Remove tenant slug from the request URL so it can be processed normally
                     // by payload.
-                    req.url = req.url.slice("/".concat(encodedTenantSlug).length);
+                    if (req.tenant) {
+                        req.url = req.url.slice("/".concat(encodedTenantSlug).length);
+                    }
                     next();
                     return [2 /*return*/];
             }

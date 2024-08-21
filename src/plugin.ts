@@ -39,7 +39,13 @@ export const tenancy =
     const options = validateOptions({ options: partialOptions, config });
     const basePath =
       options.isolationStrategy === "path" && "location" in globalThis
-        ? "/" + location.pathname.slice(1).split("/")[0]
+        ? "/" +
+          location.pathname
+            .slice(1)
+            .split("/")
+            .slice(0, 2)
+            .map((a) => decodeURIComponent(a))
+            .join("/")
         : "";
 
     return {

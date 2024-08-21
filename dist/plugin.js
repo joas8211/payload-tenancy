@@ -46,7 +46,13 @@ var tenancy = function (partialOptions) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         var options = (0, options_1.validateOptions)({ options: partialOptions, config: config });
         var basePath = options.isolationStrategy === "path" && "location" in globalThis
-            ? "/" + location.pathname.slice(1).split("/")[0]
+            ? "/" +
+                location.pathname
+                    .slice(1)
+                    .split("/")
+                    .slice(0, 2)
+                    .map(function (a) { return decodeURIComponent(a); })
+                    .join("/")
             : "";
         return __assign(__assign({}, config), { 
             // Proxy not shared globals to their respective collections.

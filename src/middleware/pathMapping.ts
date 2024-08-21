@@ -54,13 +54,10 @@ export const createPathMapping =
         where: { slug: { equals: decodeURIComponent(encodedTenantSlug) } },
       })
     ).docs[0];
-    if (!req.tenant) {
-      res.status(404).send();
-      return;
+
+    if (req.tenant) {
+      req.url = req.url.slice(`/${encodedTenantSlug}`.length);
     }
 
-    // Remove tenant slug from the request URL so it can be processed normally
-    // by payload.
-    req.url = req.url.slice(`/${encodedTenantSlug}`.length);
     next();
   };
