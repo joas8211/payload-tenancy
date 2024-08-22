@@ -1,15 +1,15 @@
 {
   "name": "payload-tenancy",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Multi-tenancy plugin for Payload CMS",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joas8211/payload-tenancy.git"
+    "url": "https://github.com/TechHoldingLLC/payload-tenancy.git"
   },
-  "author": "Jesse Sivonen",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "private": true,
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
