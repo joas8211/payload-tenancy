@@ -55,6 +55,8 @@ export const createPathMapping =
       })
     ).docs[0];
 
+    // Remove tenant slug from the request URL so it can be processed normally
+    // by payload.
     if (req.tenant) {
       req.url = req.url.slice(`/${encodedTenantSlug}`.length);
     }

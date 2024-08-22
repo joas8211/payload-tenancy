@@ -10,7 +10,8 @@ var createResourceTenantField = function (_a) {
         type: "relationship",
         name: "tenant",
         relationTo: tenantCollection,
-        hidden: true,
+        // FIXME: PayloadCMS error for the hidden field - QueryError: The following path cannot be queried: version.tenant
+        // hideen: true,
         hooks: {
             beforeChange: [
                 function (_a) {
