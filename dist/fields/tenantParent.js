@@ -160,7 +160,7 @@ var createTenantParentField = function (_a) {
         type: "relationship",
         name: "parent",
         relationTo: options.tenantCollection,
-        required: true,
+        required: false,
         filterOptions: function (_a) {
             var id = _a.id;
             return ({ id: { not_equals: id } });

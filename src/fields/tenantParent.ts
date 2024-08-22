@@ -115,7 +115,7 @@ export const createTenantParentField = ({
       type: "relationship",
       name: "parent",
       relationTo: options.tenantCollection,
-      required: true,
+      required: false,
       filterOptions: ({ id }) => ({ id: { not_equals: id } }),
       validate: createValidate(options),
       access: {
