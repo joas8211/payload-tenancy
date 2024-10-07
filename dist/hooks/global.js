@@ -166,6 +166,7 @@ var getGlobal = function (_a) {
                                 equals: extractTenantId({ options: options, req: req }),
                             },
                         },
+                        depth: 0,
                         limit: 1,
                     })];
                 case 1:

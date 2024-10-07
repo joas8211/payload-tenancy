@@ -166,6 +166,7 @@ const getGlobal = async ({
         equals: extractTenantId({ options, req }),
       },
     },
+    depth: 0,
     limit: 1,
   });
   return doc;
