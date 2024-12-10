@@ -156,11 +156,12 @@ const getGlobal = async ({
   global: GlobalConfig;
   req: PayloadRequest;
 }) => {
-  const { draft } = req.query
-  const globalCollection = global.slug + "Globals"
+  const globalCollection = global.slug + "Globals";
 
-  const tenantId = extractTenantId({ options, req })
-  const draftsEnabled = typeof draft === 'string' && ['1', 'true'].includes(draft)
+  const tenantId = extractTenantId({ options, req });
+  const { draft } =
+    req.payloadAPI === "GraphQL" ? req.body.variables : req.query;
+  const isPublished = ["1", "true"].includes(draft.toString());
 
   const {
     docs: [doc],
@@ -170,33 +171,32 @@ const getGlobal = async ({
     where: {
       tenant: {
         equals: tenantId,
-      }
+      },
     },
     depth: 0,
     limit: 1,
   });
 
-  if (!draftsEnabled && doc?._status === 'draft') {
+  if (!isPublished && doc?._status === "draft") {
     const {
       docs: [latestPublishedVersion],
     } = await req.payload.findVersions({
       req,
       collection: globalCollection,
       where: {
-        'version.tenant': {
-          equals: tenantId
+        "version.tenant": {
+          equals: tenantId,
         },
-        'version._status': {
-          equals: 'published'
-        }
+        "version._status": {
+          equals: "published",
+        },
       },
       depth: 0,
       limit: 1,
-      sort: '-createdAt',
-      
+      sort: "-createdAt",
     });
 
-    return latestPublishedVersion?.version
+    return latestPublishedVersion?.version;
   }
 
   return doc;

@@ -155,42 +155,42 @@ var updateGlobal = function (_a) {
 var getGlobal = function (_a) {
     var options = _a.options, global = _a.global, req = _a.req;
     return __awaiter(void 0, void 0, void 0, function () {
-        var draft, globalCollection, tenantId, draftsEnabled, doc, latestPublishedVersion;
+        var globalCollection, tenantId, draft, isPublished, doc, latestPublishedVersion;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    draft = req.query.draft;
                     globalCollection = global.slug + "Globals";
                     tenantId = extractTenantId({ options: options, req: req });
-                    draftsEnabled = typeof draft === 'string' && ['1', 'true'].includes(draft);
+                    draft = (req.payloadAPI === "GraphQL" ? req.body.variables : req.query).draft;
+                    isPublished = ["1", "true"].includes(draft.toString());
                     return [4 /*yield*/, req.payload.find({
                             req: req,
                             collection: globalCollection,
                             where: {
                                 tenant: {
                                     equals: tenantId,
-                                }
+                                },
                             },
                             depth: 0,
                             limit: 1,
                         })];
                 case 1:
                     doc = (_b.sent()).docs[0];
-                    if (!(!draftsEnabled && (doc === null || doc === void 0 ? void 0 : doc._status) === 'draft')) return [3 /*break*/, 3];
+                    if (!(!isPublished && (doc === null || doc === void 0 ? void 0 : doc._status) === "draft")) return [3 /*break*/, 3];
                     return [4 /*yield*/, req.payload.findVersions({
                             req: req,
                             collection: globalCollection,
                             where: {
-                                'version.tenant': {
-                                    equals: tenantId
+                                "version.tenant": {
+                                    equals: tenantId,
                                 },
-                                'version._status': {
-                                    equals: 'published'
-                                }
+                                "version._status": {
+                                    equals: "published",
+                                },
                             },
                             depth: 0,
                             limit: 1,
-                            sort: '-createdAt',
+                            sort: "-createdAt",
                         })];
                 case 2:
                     latestPublishedVersion = (_b.sent()).docs[0];
