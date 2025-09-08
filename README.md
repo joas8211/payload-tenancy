@@ -8,6 +8,14 @@ database) that make it seem like there's one application instances for each
 tenant. Each tenant can have multiple users. In this case tenants are also
 hierarchical, so tenants can also include other tenants.
 
+## DEPRECATION NOTICE
+
+Payload Tenancy will not be maintained anymore by Jesse Sivonen (@joas8211)
+and the repository will be made read-only. This plugin targets Payload 2 which
+also doesn't seem to receive updates anymore. There seems to be now an official
+multi-tenant plugin for Payload 3, which I will suggest you to check out
+instead.
+
 ## Table of contents
 
 - [Features](#features)
